@@ -1,2 +1,3 @@
 # Hand-Gesture-Recognition
-A module to detect hand gestures on live feed of a camera 
+
+A real time video feed is analyzed for hand recognition and then trained for gesture recognition made through hands. The live video is fed through camera from devices that are connected to the model such as laptop and phones.The model uses machine learning techniques to train and predict the data i.e hand gestures. Python shall be the dominant programming language used along with Java and web languages for web deployment of the model. The model can also be deployed in Android phones. The output from the model can be used to control and direct various interfaces like mouse in computers, joysticks in gaming and even virtual simulation of the hand.
