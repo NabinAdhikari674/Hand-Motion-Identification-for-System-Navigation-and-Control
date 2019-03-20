@@ -56,6 +56,7 @@ def segment(image, threshold=25):
 #-------------------------------------------------------------------------------
 print("\nFirst: Let the camera scan your background (for 2-3 seconds) without your hand on camera")
 print("then, place your hand in the Green Zone (Region Of Interest)")
+print("To kill the program Kill the Python Shell running the module (not the Camera view or Contour View)")
 if __name__ == "__main__":
                 # initialize weight for running average
                 aWeight = 0.5
