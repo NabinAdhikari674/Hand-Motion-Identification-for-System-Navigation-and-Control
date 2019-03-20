@@ -1,8 +1,13 @@
 #imports
-import cv2
-import imutils
-import numpy as np
-
+print("\t\t\t##Running "camera.py"##");
+try:
+    print("Importing Packages Required...",end="##")
+    import cv2
+    import imutils
+    import numpy as np
+    print("...Import Sucessful")
+except:
+    print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
 # global variables
 bg = None
 
