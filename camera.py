@@ -1,5 +1,5 @@
 #imports
-print("\t\t\t##Running "camera.py"##");
+print("\t\t\t##Running ","camera.py##");
 try:
     print("Importing Packages Required...",end="##")
     import cv2
