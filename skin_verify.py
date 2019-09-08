@@ -22,7 +22,6 @@ flags=[];
 names = ['B','G','R','Labels']
 print("## Done.")
 
-
 def DataPrepper():
     print("\t\t\t##Running ","DataPrepper Function##");
     global names;global flags
@@ -113,7 +112,6 @@ def PreProcessor(data1):
     flags.append(3)
     return (x_train,x_test,y_train,y_test)
 
-
 def TrainerTester(x_train,x_test,y_train,y_test):
     print("\t\t\t##Running ","TrainerTester Function##");
     global flags;
@@ -139,7 +137,6 @@ def TrainerTester(x_train,x_test,y_train,y_test):
     flags.append(4)
     return(model5)
 
-    
 def ModelSaver(model):
     print("This Model Saver")
     print("The Flags are : ",flags)
@@ -168,6 +165,48 @@ def ModelSaver(model):
                 print("!!! Exiting without Saving the model !!!")
         choser1234(model)
 
+def SkinPredict(B,G,R):
+    print("\t\t\n  #### Running Skin Color Predictor from 'skin_verify.py' Module ####\n")
+    try:
+        print("Importing Model from Pickle File...##",end=" ")
+        import pickle
+        with open('Skin_verify_model.pkl', 'rb') as f:
+            model = pickle.load(f)
+        print("Model Loaded.\n")
+    except FileNotFoundError:
+        print("\n\t\t!!! Model not Found !!!")
+        def choser1212():
+            choose=str(input("\n\t\tOpen File Picker to Choose Model to load?\nEnter [y/n]:   "))
+            if choose=='y':
+                from tkinter import Tk
+                from tkinter.filedialog import askopenfilename
+                root=Tk()
+                ftypes = [('Pickle FIle',"*.pkl"),('All Types',"*.*")]
+                ttl  = "File Picker"
+                filename = askopenfilename(filetypes = ftypes,title = ttl)
+                root.withdraw()
+                print ("This is Chosen FilePath : ",filename)
+                print("\tReading Model from Choosen File...##",end=" ")
+                import pickle
+                with open(filename, 'rb') as f:
+                    model = pickle.load(f)
+                return model
+                print("Model Loaded.\n")
+            elif choose=='n':
+                print("\n\t\tThere is no Model to Load")
+                print("Prediction without model is Impossible.So a model has to be Loaded or Trained.")
+                print("To train a new model for 'skin_verify' run 'skin_verify.py' and Train model there.")
+                print("Try again to Load a Saved 'Skin_verify_model.pkl' or similar Model")
+                choser1212()
+            else:
+                print("Wrong Choice...TRY AGAIN\n")
+                choser1212()
+        model=choser12()
+    import numpy as np
+    zz=np.array([B,G,R])
+    zz=zz.reshape(1,-1)
+    prediction5=model.predict(zz)
+    return prediction5
 
 if __name__ == "__main__":
     print("This is Main Block of the Program")
@@ -175,6 +214,7 @@ if __name__ == "__main__":
     (x_train,x_test,y_train,y_test) = PreProcessor(data1)
     try:
         print("Importing Model from Pickle File...##",end=" ")
+        import pickle
         with open('Skin_verify_model.pkl', 'rb') as f:
             model = pickle.load(f)
         print("Model Loaded.\n")
@@ -210,13 +250,11 @@ if __name__ == "__main__":
                 print("Wrong Choice...TRY AGAIN\n")
                 choser12()
         model=choser12()
-        from sklearn.metrics import accuracy_score
+    from sklearn.metrics import accuracy_score
     print("\nMaking Predictions from Model")
     prediction5=model.predict(x_test)
     print("Accuracy Score MODEL 4 is : ",accuracy_score(prediction5,y_test))
     ModelSaver(model)
     print("Main Block DOne")
-    
-
 
 print("\n\tEND of 'skin_verify.py'")
