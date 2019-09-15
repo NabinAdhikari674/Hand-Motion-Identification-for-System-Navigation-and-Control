@@ -4,6 +4,8 @@
 
 print("\t\t\t##Running ","gesture-verify-test.py##");
 print("Setting Global Variables and Packages...",end=' ')
+import logging
+logging.getLogger('tensorflow').disabled = True
 import numpy as np
 flags=[];
 names = ['1','2','3','4','5','Palm','Fist']
@@ -11,8 +13,30 @@ d1=d2=d3=d4=d5=dFist=dPalm=''
 Gesture_1=Gesture_2=Gesture_3=Gesture_4=Gesture_5=Gesture_Fist=Gesture_Palm=[]
 print("## Done.")
 
+def NotFoundSoln(ftypes,title):
+    print("\n\t\t!!! Model not Found !!!")
+    choose=str(input("\n\t\tOpen File Picker to Choose Model to load?\nEnter [y/n]:   "))
+    if choose=='y':
+        from tkinter import Tk
+        from tkinter.filedialog import askopenfilename
+        root=Tk()
+        filename = askopenfilename(filetypes = ftypes,title = title)
+        root.withdraw()
+        print ("This is Chosen FilePath : ",filename)
+        return filename
+    elif choose=='n':
+        print("\n\t\tThere is no Model to Load")
+        print("Prediction without model is Impossible.So a model has to be Loaded or Trained.")
+        print("To train a new model for 'skin_verify' run 'skin_verify.py' and Train model there.")
+        print("Try again to Load a Saved 'Skin_verify_model.pkl' or similar Model")
+        NotFoundSoln(ftypes,title)
+    else:
+        print("Wrong Choice...TRY AGAIN\n")
+        NotFoundSoln(ftypes,title)
+
 def DataReader(dir_path):
     print("\t\t\t##Running ","DataReader Function##");
+    import os
     global names,flags
     global d1,d2,d3,d4,d5,DFist,DPalm
     global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
@@ -40,8 +64,7 @@ def DataReader(dir_path):
     Gesture_5 = os.listdir(d5);   #print(Gesture_5[:10])
     Gesture_Fist = os.listdir(dFist);   #print(Gesture_Fist[:10])
     Gesture_Palm = os.listdir(dPalm);   #print(Gesture_Palm[:10])
-
-
+    return dir_path
 
 def DataPrepper():
     print("\t\t\t##Running ","DataPrepper Function##");
@@ -60,7 +83,7 @@ def DataPrepper():
         print("Importing Data from Folders...##",end=" ")
         current_path=os.getcwd()
         #print("The Current Path is : ",current_path)
-        DataReader(current_path)
+        dir_path=DataReader(current_path)
         flags.append(1)
         print("Read DONE.\n")
     except FileNotFoundError:
@@ -76,8 +99,9 @@ def DataPrepper():
                 foldername = askdirectory(initialdir=os.getcwd,title="Folder Chooser" )
                 #print ("This is Chosen Folder and Path : ",foldername)
                 print("\tReading Data from Choosen Folder...##",end=" ")
-                DataReader(foldername)
+                dir_path=DataReader(foldername)
                 flags.append(2)
+                return dir_path
                 print("Read DONE.\n")
             elif choose=='n':
                 print("\n\t\tThere are no Files or Folders to process")
@@ -86,45 +110,35 @@ def DataPrepper():
             else:
                 print("Wrong Choice...TRY AGAIN\n")
                 choser()
-        data=choser()
+        dir_path=choser()
         print("Chooser DONE")
     finally:
         print("Data LOAD Done")
 
-    import matplotlib.pyplot as plt
-    import matplotlib.image as mpimg
+    #import matplotlib.pyplot as plt
+    #import matplotlib.image as mpimg
 
-    pic_index = 2
+    #pic_index = 2
 
-    next_1 = [os.path.join(d1, fname)for fname in Gesture_1[pic_index-2:pic_index]]
-    next_2 = [os.path.join(d2, fname)for fname in Gesture_2[pic_index-2:pic_index]]
-    next_3 = [os.path.join(d3, fname)for fname in Gesture_3[pic_index-2:pic_index]]
+    #next_1 = [os.path.join(d1, fname)for fname in Gesture_1[pic_index-2:pic_index]]
+    #next_2 = [os.path.join(d2, fname)for fname in Gesture_2[pic_index-2:pic_index]]
+    #next_3 = [os.path.join(d3, fname)for fname in Gesture_3[pic_index-2:pic_index]]
 
-    for i, img_path in enumerate(next_1+next_2+next_3):
+    #for i, img_path in enumerate(next_1+next_2+next_3):
       #print(img_path)
-      img = mpimg.imread(img_path)
-      plt.imshow(img)
-      plt.axis('Off')
-      plt.show()
+    #  img = mpimg.imread(img_path)
+    #  plt.imshow(img)
+    #  plt.axis('Off')
+    # plt.show()
 
-    if 2 in flags:
-        print("It seems that You have choosen a File to load instead of default file")
-        def choser1():
-            print("The Q now is :")
-            choose=str(input("\n\t\tDo you want to save the current open file for later use?\nEnter [y/n]:   "))
-            if choose=='y':
-                print("\nSaving Data to Text file (Skin_NonSkin.txt)...##",end=" ")
-                data.to_csv('Skin_NonSkin.txt',sep = "\t", index=False, header=False)
-                print("SAVE TO TEXT File DONE.")
-        choser1()
-    return (data)
-    print("\n\nData DataPrepper END\n")
+    return dir_path
+    print("\n\n DataPrepper END\n")
 
 def PreProcessor(dir_path):
     print("\t\t\t##Running ","PreProcessor Function##");
-    global names,flags
-    global d1,d2,d3,d4,d5,DFist,DPalm
-    global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
+    global flags
+    #global d1,d2,d3,d4,d5,DFist,DPalm
+    #global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
 
     try:
         print("Importing Packages Required...",end="##")
@@ -147,7 +161,7 @@ def PreProcessor(dir_path):
       zoom_range=0.2,
       horizontal_flip=True,
       fill_mode='nearest')
-     train_generator = training_datagen.flow_from_directory(TRAINING_DIR,target_size=(150,150),class_mode='categorical')
+    train_generator = training_datagen.flow_from_directory(TRAINING_DIR,target_size=(150,150),class_mode='categorical')
 
     #VALIDATION_DIR = "/tmp/rps-test-set/"
     #validation_datagen = ImageDataGenerator(rescale = 1./255)
@@ -157,57 +171,96 @@ def PreProcessor(dir_path):
     flags.append(3)
     return (train_generator)
 
-def TrainerTester(x_train,x_test,y_train,y_test):
-    print("\t\t\t##Running ","TrainerTester Function##");
-    global names,flags
-    global d1,d2,d3,d4,d5,DFist,DPalm
-    global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
+def NeuralNetBuilder():
+    print("\t\t\t##Running ","NeuralNetBuilder Function##");
+    global flags
+    #global d1,d2,d3,d4,d5,DFist,DPalm
+    #global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
 
     try:
         print("Importing Packages Required...",end="##")
-        impoprt tensorflow as tf
+        import tensorflow as tf
         #from matplotlib import pyplot as plt
         print("...Import Sucessful")
     except:
         print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
 
     model = tf.keras.models.Sequential([
-    # Note the input shape is the desired size of the image 150x150 with 3 bytes color
-    # This is the first convolution
-    tf.keras.layers.Conv2D(64, (3,3), activation='relu', input_shape=(150, 150, 3)),
-    tf.keras.layers.MaxPooling2D(2, 2),
-    # The second convolution
-    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
-    tf.keras.layers.MaxPooling2D(2,2),
-    # The third convolution
-    tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-    tf.keras.layers.MaxPooling2D(2,2),
-    # The fourth convolution
-    tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-    tf.keras.layers.MaxPooling2D(2,2),
-    # Flatten the results to feed into a DNN
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dropout(0.5),
-    # 512 neuron hidden layer
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(3, activation='softmax')
-    ])
-
+                                        # Note the input shape is the desired size of the image 150x150 with 3 bytes color
+                                        # This is the first convolution
+                                        tf.keras.layers.Conv2D(64, (3,3), activation='relu', input_shape=(150, 150, 3)),
+                                        tf.keras.layers.MaxPooling2D(2, 2),
+                                        # The second convolution
+                                        tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+                                        tf.keras.layers.MaxPooling2D(2,2),
+                                        # The third convolution
+                                        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
+                                        tf.keras.layers.MaxPooling2D(2,2),
+                                        # The fourth convolution
+                                        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
+                                        tf.keras.layers.MaxPooling2D(2,2),
+                                        # Flatten the results to feed into a DNN
+                                        tf.keras.layers.Flatten(),
+                                        tf.keras.layers.Dropout(0.5),
+                                        # 512 neuron hidden layer
+                                        tf.keras.layers.Dense(512, activation='relu'),
+                                        tf.keras.layers.Dense(6, activation='softmax')
+                                        ])
 
     model.summary()
     model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+    print("\n\t##Neural Net Model Built and Compiled(Ready for Training). END\n")
+    flags.append(7)
+    return(model)
 
-    history = model.fit_generator(train_generator, epochs=25, validation_data = validation_generator, verbose = 1)
+def ModelTrainer(model,train_generator):
+    print("\t\t\t##Running ","ModelTrainerTester Function##");
+    global flags
+    #global d1,d2,d3,d4,d5,DFist,DPalm
+    #global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
 
-    model.save("rps.h5")
+    try:
+        print("Importing Packages Required...",end="##")
+        import tensorflow as tf
+        #from matplotlib import pyplot as plt
+        print("...Import Sucessful")
+    except:
+        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
 
+    trained=0
+    choose=str(input("\n\t\tStart the training?\nEnter [y/n]:   "))
+    if choose=='y':
+        print("Sit Tight !! Training takes a whole lot of Time.\n")
+        history = model.fit_generator(train_generator, epochs=22, verbose = 1)# ,validation_data = validation_generator
+        trained = 1
+    if choose=='n':
+        choose=str(input("\n\t\tHalt the Training for Sure?\nEnter [y/n]:   "))
+        if choose=='y':
+            pass
+        if choose=='n':
+            print("Buckle Up !! You are up for a Long Ride !!\n")
+            history = model.fit_generator(train_generator, epochs=22, verbose = 1)  # ,validation_data = validation_generator
+            trained = 1
+
+    if trained == 1:
+        choose=str(input("\n\t\tSave Model to the Disk?\nEnter [y/n]:   "))
+        if choose =='y':
+            model.save("gesture_neural_weights1.h5")
+            print("Model Saved !! ('gesture_neural_weights1.h5')")
+        if choose =='n':
+            choose=str(input("\n\t\tYou Sure to not save the Hard-earned Trained Model?\nEnter [y/n]:   "))
+            if choose =='y':
+                pass
+            if choose =='n':
+                model.save("gesture_neural_weights1.h5")
+                print("Knew It !! Model Saved as ('gesture_neural_weights1.h5')")
     flags.append(4)
-    return(model5)
+    return(model)
 
 def ModelSaver(model):
     print("This Model Saver")
     print("The Flags are : ",flags)
-    ok=0
+    ok=1
     if 5 in flags:
         print("It seems that You have Trained a new Model without Loading one")
         ok=1
@@ -221,107 +274,88 @@ def ModelSaver(model):
         print("Choser Ahead")
         def choser1234(model):
             print("The Q now is :")
-            choose=str(input("\n\t\tDo you want to save the current Model for later use?\nEnter [y/n]:   "))
+            choose=str(input("\tDo you want to save the Neural Model( Frame Only ) for later use?\nEnter [y/n]:   "))
             if choose=='y':
-                print("\nSaving Model to Pickle file (Skin_verify_model.pkl)...##",end=" ")
-                import pickle
-                with open('Skin_verify_model.pkl', 'wb') as f:
-                    pickle.dump(model, f)
+                print("==================================================")
+                print("\nSaving Model to Jason File (gesture_neural_model.json)...##",end=" ")
+                import time
+                file="gesture_neural_model1.json"
+                print("Creating Model At: ", file)
+                start_time = time.time()
+                #model = NeuralNetBuilder()
+                json_model = model.to_json()
+                with open(file, "w") as json_file:
+                    json_file.write(json_model)
+                end_time = time.time()
+                total_time = end_time - start_time
+                total_time=int(total_time)
+                print("Model Saved in : ", total_time, " seconds")
                 print("SAVE MODEL DONE.")
+                print("==================================================")
             elif choose=='n':
                 print("!!! Exiting without Saving the model !!!")
         choser1234(model)
 
-def SkinPredict(B,G,R):
-    print("\t\t\n  #### Running Skin Color Predictor from 'skin_verify.py' Module ####\n")
+def ModelLoader():
+    print("\t\t\n  #### Running ModelLoader Function ####\n")
     try:
-        print("Importing Model from Pickle File...##",end=" ")
-        import pickle
-        with open('Skin_verify_model.pkl', 'rb') as f:
-            model = pickle.load(f)
-        print("Model Loaded.\n")
+        print("Importing Packages Required...",end="##")
+        from tensorflow.keras.models import load_model
+        from tensorflow.keras.models import model_from_json
+        print("...Import Sucessful")
+    except:
+        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
+
+    print("Importing Trained Model using \"json\" and \"h5\" Files...##",end=" ")
+    try:
+        json_file = open('gesture_neural_model.json', 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        model = model_from_json(loaded_model_json)
     except FileNotFoundError:
-        print("\n\t\t!!! Model not Found !!!")
-        def choser1212():
-            choose=str(input("\n\t\tOpen File Picker to Choose Model to load?\nEnter [y/n]:   "))
-            if choose=='y':
-                from tkinter import Tk
-                from tkinter.filedialog import askopenfilename
-                root=Tk()
-                ftypes = [('Pickle FIle',"*.pkl"),('All Types',"*.*")]
-                ttl  = "File Picker"
-                filename = askopenfilename(filetypes = ftypes,title = ttl)
-                root.withdraw()
-                print ("This is Chosen FilePath : ",filename)
-                print("\tReading Model from Choosen File...##",end=" ")
-                import pickle
-                with open(filename, 'rb') as f:
-                    model = pickle.load(f)
-                return model
-                print("Model Loaded.\n")
-            elif choose=='n':
-                print("\n\t\tThere is no Model to Load")
-                print("Prediction without model is Impossible.So a model has to be Loaded or Trained.")
-                print("To train a new model for 'skin_verify' run 'skin_verify.py' and Train model there.")
-                print("Try again to Load a Saved 'Skin_verify_model.pkl' or similar Model")
-                choser1212()
-            else:
-                print("Wrong Choice...TRY AGAIN\n")
-                choser1212()
-        model=choser12()
+        ftypes = [('Json FIle',"*.json")]
+        ttl  = "Json File Picker"
+        filename1=NotFoundSoln(ftypes,tt1)
+        json_file = open(filename1, 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        model = model_from_json(loaded_model_json)
+    try:
+        model.load_weights("gesture_neural_weights.h5")
+    except FileNotFoundError:
+        ftypes = [('Hierarchical Data Format(HDF)',"*.h5")]
+        tt1 = "Hierarchical Data Format (HDFv5) Picker"
+        filename2 = NotFoundSoln(ftypes,tt1)
+        model.load_weights(filename2)
+    print("Model Loaded from disk.")
+    return model
+
+def Predictor(model,picture):
     import numpy as np
-    zz=np.array([B,G,R])
-    zz=zz.reshape(1,-1)
-    prediction5=model.predict(zz)
+    #img = image.load_img(path, target_size=(150, 150))
+    x = image.img_to_array(picture)
+    x = np.expand_dims(x, axis=0)
+    images = np.vstack([x])
+    prediction5=model.predict(images)
     return prediction5
 
 if __name__ == "__main__":
-    print("This is Main Block of the Program")
-    (data1) = DataPrepper()
-    (x_train,x_test,y_train,y_test) = PreProcessor(data1)
-    try:
-        print("Importing Model from Pickle File...##",end=" ")
-        import pickle
-        with open('Skin_verify_model.pkl', 'rb') as f:
-            model = pickle.load(f)
-        print("Model Loaded.\n")
-    except FileNotFoundError:
-        print("\n\n\t\tModel not Found!!!")
-        def choser12():
-            global flag;global x_train,x_test,y_train,y_test;
-            choose=str(input("\n\t\tOpen File Picker to Choose Model to load?\nEnter [y/n]:   "))
-            if choose=='y':
-                from tkinter import Tk
-                from tkinter.filedialog import askopenfilename
-                root=Tk()
-                ftypes = [('Pickle FIle',"*.pkl"),('All Types',"*.*")]
-                ttl  = "File Picker"
-                filename = askopenfilename(filetypes = ftypes,title = ttl)
-                root.withdraw()
-                print ("This is Chosen FilePath : ",filename)
-                print("\tReading Model from Choosen File...##",end=" ")
-                import pickle
-                with open(filename, 'rb') as f:
-                    model = pickle.load(f)
-                flags.append(6)
-                return model
-                print("Model Loaded.\n")
-            elif choose=='n':
-                print("\n\t\tThere is no Model to Load")
-                print("\n\t\tTraining a new model with the Data loaded  ...")
-                model=TrainerTester(x_train,x_test,y_train,y_test);
-                print("New Model Trained")
-                flags.append(5)
-                return(model)
-            else:
-                print("Wrong Choice...TRY AGAIN\n")
-                choser12()
-        model=choser12()
-    from sklearn.metrics import accuracy_score
-    print("\nMaking Predictions from Model")
-    prediction5=model.predict(x_test)
-    print("Accuracy Score MODEL 4 is : ",accuracy_score(prediction5,y_test))
-    ModelSaver(model)
-    print("Main Block DOne")
+    print("===== ## This is Main Block of the Program of 'gesture_verify.py' ## =====")
+    choose=str(input("\n\t\tLoad Model From the Disk?\nEnter [y/n]:   "))
+    if choose=='y':
+        model=ModelLoader()
+    if choose=='n':
+        choose=str(input("\n\t\tYou Sure? Are you upto the heavy Task uphead?\nEnter [y/n]:   "))
+        if choose=='y':
+            dir_path=DataPrepper()
+            train_generator=PreProcessor(dir_path)
+            model=NeuralNetBuilder()
+            ModelSaver(model)
+            ModelTrainer(model,train_generator)
+        if choose=='n':
+            model=ModelLoader()
 
-print("\n\tEND of 'skin_verify.py'")
+    print("\nPro Tip : You can Make Gesture Predictions using this Module")
+    print("\n====== ## Main Block DOne ##======")
+
+print("\n\tEND of 'gesture_verify.py'")
