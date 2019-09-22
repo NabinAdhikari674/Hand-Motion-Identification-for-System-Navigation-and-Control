@@ -2,7 +2,7 @@
 #The gesture dataset is collected by randomly clicking images
 #from threshold window while running capture module
 
-print("\t\t\t##Running ","gesture-verify-test.py##");
+print("\n\t\t\t##Running ","gesture-verify-test.py##");
 print("Setting Global Variables and Packages...",end=' ')
 import logging
 logging.getLogger('tensorflow').disabled = True
@@ -35,19 +35,19 @@ def NotFoundSoln(ftypes,title):
         NotFoundSoln(ftypes,title)
 
 def DataReader(dir_path):
-    print("\t\t\t##Running ","DataReader Function##");
+    print("\n\t\t\t##Running ","DataReader Function##");
     import os
     global names,flags
     global d1,d2,d3,d4,d5,DFist,DPalm
     global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
     print("The Passed Path is : ",dir_path)
-    d1 = os.path.join('DATA/1/')
-    d2 = os.path.join('DATA/2/')
-    d3 = os.path.join('DATA/3/')
-    d4 = os.path.join('DATA/4/')
-    d5 = os.path.join('DATA/5/')
-    dFist = os.path.join('DATA/Fist/')
-    dPalm = os.path.join('DATA/Palm/')
+    d1 = os.path.join('DATA/TrainingData/1/')
+    d2 = os.path.join('DATA/TrainingData/2/')
+    d3 = os.path.join('DATA/TrainingData/3/')
+    d4 = os.path.join('DATA/TrainingData/4/')
+    d5 = os.path.join('DATA/TrainingData/5/')
+    dFist = os.path.join('DATA/TrainingData/Fist/')
+    dPalm = os.path.join('DATA/TrainingData/Palm/')
 
     print('Total Training Gesture (1) images:', len(os.listdir(d1)))
     print('Total Training Gesture (2) images:', len(os.listdir(d2)))
@@ -64,10 +64,13 @@ def DataReader(dir_path):
     Gesture_5 = os.listdir(d5);   #print(Gesture_5[:10])
     Gesture_Fist = os.listdir(dFist);   #print(Gesture_Fist[:10])
     Gesture_Palm = os.listdir(dPalm);   #print(Gesture_Palm[:10])
+    dir_path=os.path.join('DATA/TrainingData/')
+    print("===============================\nThe Returned Path is : ",dir_path)
+
     return dir_path
 
 def DataPrepper():
-    print("\t\t\t##Running ","DataPrepper Function##");
+    print("\n\t\t\t##Running ","DataPrepper Function##");
     global names,flags
     global d1,d2,d3,d4,d5,DFist,DPalm
     global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
@@ -154,22 +157,22 @@ def PreProcessor(dir_path):
     print("Training Directory is :",TRAINING_DIR)
     training_datagen = ImageDataGenerator(
       rescale = 1./255,
-	  rotation_range=40,
+      rotation_range=40,
       width_shift_range=0.2,
       height_shift_range=0.2,
       shear_range=0.2,
       zoom_range=0.2,
       horizontal_flip=True,
       fill_mode='nearest')
-    train_generator = training_datagen.flow_from_directory(TRAINING_DIR,target_size=(150,150),class_mode='categorical')
+    train_generator = training_datagen.flow_from_directory(TRAINING_DIR,target_size=(150,150),color_mode='rgb',class_mode='categorical')
 
-    #VALIDATION_DIR = "/tmp/rps-test-set/"
-    #validation_datagen = ImageDataGenerator(rescale = 1./255)
-    #validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR,target_size=(150,150),class_mode='categorical')
-
+    VALIDATION_DIR='C:/Users/nabin/Desktop/Test Files/DATA/ValidationData/'
+    validation_datagen = ImageDataGenerator(rescale = 1./255)
+    validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR,target_size=(150,150),color_mode='rgb',class_mode='categorical')
+    
     print("\n\t##Data PreProcessing Done. END\n")
     flags.append(3)
-    return (train_generator)
+    return (train_generator,validation_generator)
 
 def NeuralNetBuilder():
     print("\t\t\t##Running ","NeuralNetBuilder Function##");
@@ -204,7 +207,7 @@ def NeuralNetBuilder():
                                         tf.keras.layers.Dropout(0.5),
                                         # 512 neuron hidden layer
                                         tf.keras.layers.Dense(512, activation='relu'),
-                                        tf.keras.layers.Dense(6, activation='softmax')
+                                        tf.keras.layers.Dense(7, activation='softmax')
                                         ])
 
     model.summary()
@@ -213,7 +216,7 @@ def NeuralNetBuilder():
     flags.append(7)
     return(model)
 
-def ModelTrainer(model,train_generator):
+def ModelTrainer(model,train_generator,validation_generator):
     print("\t\t\t##Running ","ModelTrainerTester Function##");
     global flags
     #global d1,d2,d3,d4,d5,DFist,DPalm
@@ -231,7 +234,7 @@ def ModelTrainer(model,train_generator):
     choose=str(input("\n\t\tStart the training?\nEnter [y/n]:   "))
     if choose=='y':
         print("Sit Tight !! Training takes a whole lot of Time.\n")
-        history = model.fit_generator(train_generator, epochs=22, verbose = 1)# ,validation_data = validation_generator
+        history = model.fit_generator(train_generator,validation_data = validation_generator, epochs=100, verbose = 1)# ,validation_data = validation_generator
         trained = 1
     if choose=='n':
         choose=str(input("\n\t\tHalt the Training for Sure?\nEnter [y/n]:   "))
@@ -239,7 +242,7 @@ def ModelTrainer(model,train_generator):
             pass
         if choose=='n':
             print("Buckle Up !! You are up for a Long Ride !!\n")
-            history = model.fit_generator(train_generator, epochs=22, verbose = 1)  # ,validation_data = validation_generator
+            history = model.fit_generator(train_generator, epochs=100, verbose = 1)  # ,validation_data = validation_generator
             trained = 1
 
     if trained == 1:
@@ -314,7 +317,7 @@ def ModelLoader():
         model = model_from_json(loaded_model_json)
     except FileNotFoundError:
         ftypes = [('Json FIle',"*.json")]
-        ttl  = "Json File Picker"
+        tt1  = "Json File Picker"
         filename1=NotFoundSoln(ftypes,tt1)
         json_file = open(filename1, 'r')
         loaded_model_json = json_file.read()
@@ -327,16 +330,21 @@ def ModelLoader():
         tt1 = "Hierarchical Data Format (HDFv5) Picker"
         filename2 = NotFoundSoln(ftypes,tt1)
         model.load_weights(filename2)
-    print("Model Loaded from disk.")
+    print("\n $$$$$$$$$$ Model Loaded from disk. $$$$$$$$$$$")
     return model
 
-def Predictor(model,picture):
-    import numpy as np
-    #img = image.load_img(path, target_size=(150, 150))
-    x = image.img_to_array(picture)
-    x = np.expand_dims(x, axis=0)
-    images = np.vstack([x])
-    prediction5=model.predict(images)
+def GesturePredictor(model,array):
+    #img=image.array_to_img(array)
+    #img = image.load_img(images, target_size=(150, 150))
+    #x = image.img_to_array(img)
+    #x = img_to_array(array)
+    #resize=cv2.resize(x,(150,150))
+    #resize=img_to_array(x)
+    #img=resize[np.newaxis,...]
+    img = np.expand_dims(array,axis=0)
+    img = np.vstack([img])
+    prediction5=model.predict(img)
+
     return prediction5
 
 if __name__ == "__main__":
@@ -348,13 +356,33 @@ if __name__ == "__main__":
         choose=str(input("\n\t\tYou Sure? Are you upto the heavy Task uphead?\nEnter [y/n]:   "))
         if choose=='y':
             dir_path=DataPrepper()
-            train_generator=PreProcessor(dir_path)
+            train_generator,validation_generator=PreProcessor(dir_path)
+            #print(train_generator)
+            labels = (train_generator.class_indices)
+            labels = dict((v,k) for k,v in labels.items())
+            print("The Training Labels are ================================\n",labels,'\n=================================================')
             model=NeuralNetBuilder()
             ModelSaver(model)
-            ModelTrainer(model,train_generator)
+            ModelTrainer(model,train_generator,validation_generator)
         if choose=='n':
             model=ModelLoader()
-
+    from keras.preprocessing import image
+    import cv2
+    while True:
+        ftypes = [('Jpg File',"*.jpg")]
+        tt1  = "Picture Picker"
+        path=NotFoundSoln(ftypes,tt1)
+        img = image.load_img(path, target_size=(150, 150))
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        images = np.vstack([x])
+        classes = model.predict(images, batch_size=10)
+        print(classes)
+        keypress = cv2.waitKey(2) & 0xFF
+        if keypress == ord("q"):
+            print("Exit Key Pressed")
+            break
+        
     print("\nPro Tip : You can Make Gesture Predictions using this Module")
     print("\n====== ## Main Block DOne ##======")
 
