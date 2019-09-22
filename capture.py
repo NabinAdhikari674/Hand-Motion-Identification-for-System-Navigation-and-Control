@@ -3,15 +3,19 @@ try:
     print("Importing Packages Required...",end="##")
     import cv2
     import numpy as np
+    import gesture_verify as gvf
+    import PIL
     print("...Import Sucessful")
 except:
     print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
 
 print("Setting Global Variables...",end=' ')
+gesture_model=gvf.ModelLoader()
+names = ['1','2','3','4','5','Palm','Fist']
 currentframe=1
 i=0
 bg=None
-kernel = np.ones((1,1),np.uint8)
+kernel = np.ones((1,1),np.uint8) #kernel for Opening and Closing morphologyEx
 print("## Done.")
 
 def average(img):
@@ -21,25 +25,25 @@ def average(img):
         print("## Running Initial Background Scan . . . ")
         return
     cv2.accumulateWeighted(img,bg,0.3)
+#weight(0.3 now) is update bg speed(how fast the accumulator “forgets” about earlier images)
     if i==49:
         print(" Scan Done...Ready For Threshold ##")
-#weight(0.3 now) is update bg speed(how fast the accumulator “forgets” about earlier images)
+
 def segmenter(img):
     global bg
     #cv2.accumulateWeighted(img,bg,0.001)
     diff = cv2.absdiff(bg.astype("uint8"),img)
-    
+
     thres = cv2.threshold(diff,25,255,cv2.THRESH_BINARY) [1]
-    thres = cv2.morphologyEx(thres, cv2.MORPH_OPEN, kernel)      #Opening
-    thres = cv2.morphologyEx(thres, cv2.MORPH_CLOSE,np.ones((4,4),np.uint8) )     #Closing
+    #thres = cv2.morphologyEx(thres, cv2.MORPH_OPEN, kernel)      #Opening
+    #thres = cv2.morphologyEx(thres, cv2.MORPH_CLOSE,np.ones((4,4),np.uint8) )     #Closing
     cnts,_ = cv2.findContours(thres.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-    
+
     if len(cnts) == 0:
         return
     else:
         segment = max(cnts, key=cv2.contourArea)
         return (thres,segment)
-    
 
 if __name__ == "__main__":
     print("\n\t\t** Hello from Main of 'capture-test.py' **")
@@ -66,9 +70,22 @@ if __name__ == "__main__":
             sg_return = segmenter( gray )
             if sg_return is not None:
                 (thres,segment) = sg_return
+                #print(thres)
+                resized_image = cv2.resize(thres, (150, 150))
+                image = cv2.cvtColor(resized_image, cv2.COLOR_GRAY2RGB)
+                #img_cv = cv2.resize(thres,(150,150))
+                #img_cv=PIL.Image.fromarray(thres, mode=None)
+                pred_ges=gvf.GesturePredictor(gesture_model,image)
+                #pred=max(pred_ges)
+                #print(pred)
+                #pred_ges=pred_ges.tolist()
+                #index= pred_ges.index(pred)
+                #gesture=names[index]
+                print("The prediction is : ",pred_ges)
+                cv2.imshow("Resized Image in RGB",image)
                 cv2.imshow("Binary Threshold",thres)
                 #cv2.imshow("2 Threshold",thres2)
-                
+
 
         cv2.imshow('Live Feed',frame)
         cv2.imshow('Cropped',crop)
@@ -86,8 +103,13 @@ if __name__ == "__main__":
             print ('Creating...' + name)
             cv2.imwrite(name,crop)
             currentframe += 1
+        if keypress == ord("x"):
+            name = 'DATA/BlackCapture' + str(currentframe) + '.jpg'
+            print ('Creating...' + name)
+            cv2.imwrite(name,thres)
+            currentframe += 1
+            
     camera.release()
     cv2.destroyAllWindows()
-
 
 print("Done")
