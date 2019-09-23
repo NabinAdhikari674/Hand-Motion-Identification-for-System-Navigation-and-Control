@@ -13,3 +13,6 @@ The initial data is the video feed from camera captures in certain frame rates s
 
 ## LANGUAGES And LIBRARIES USED: 
 The programming language to be dominantly used is “Python”, probably version 3. Various libraries such as OpenCV, SkLearn, NumPy etc. will be used with python. The language used to control interfaces in various systems will be “Java”. If we decide to deploy the model using web technologies, various Web Languages can also be used.
+
+
+####The Model files(Json with NN Frame and H5 with Weights) are uploaded in G-Drive and the links will be shared later.
