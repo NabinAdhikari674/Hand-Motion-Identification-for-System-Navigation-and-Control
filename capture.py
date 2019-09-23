@@ -15,7 +15,7 @@ names = ['1','2','3','4','5','Palm','Fist']
 currentframe=1
 i=0
 bg=None
-kernel = np.ones((1,1),np.uint8) #kernel for Opening and Closing morphologyEx
+kernel = np.ones((2,2),np.uint8) #kernel for Opening and Closing morphologyEx
 print("## Done.")
 
 def average(img):
@@ -35,8 +35,9 @@ def segmenter(img):
     diff = cv2.absdiff(bg.astype("uint8"),img)
 
     thres = cv2.threshold(diff,25,255,cv2.THRESH_BINARY) [1]
-    #thres = cv2.morphologyEx(thres, cv2.MORPH_OPEN, kernel)      #Opening
-    #thres = cv2.morphologyEx(thres, cv2.MORPH_CLOSE,np.ones((4,4),np.uint8) )     #Closing
+    thres = cv2.morphologyEx(thres, cv2.MORPH_OPEN, kernel)      #Opening
+    thres = cv2.morphologyEx(thres, cv2.MORPH_CLOSE,np.ones((3,3),np.uint8) )     #Closing
+    #thres = cv2.morphologyEx(thres, cv2.MORPH_CLOSE,np.ones((3,3),np.uint8) )  
     cnts,_ = cv2.findContours(thres.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 
     if len(cnts) == 0:
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     while camera.isOpened():
         ret, frame = camera.read()
 
-        #frame = cv2.bilateralFilter(frame, 5, 50, 100)#smoothing filter
+        frame = cv2.bilateralFilter(frame, 5, 50, 100)#smoothing filter
         frame = cv2.flip(frame, 1)
 
         cv2.rectangle(frame,(370,90),(630,400),(255,0,0),0)
@@ -73,22 +74,23 @@ if __name__ == "__main__":
                 #print(thres)
                 resized_image = cv2.resize(thres, (150, 150))
                 image = cv2.cvtColor(resized_image, cv2.COLOR_GRAY2RGB)
-                #img_cv = cv2.resize(thres,(150,150))
-                #img_cv=PIL.Image.fromarray(thres, mode=None)
                 pred_ges=gvf.GesturePredictor(gesture_model,image)
-                #pred=max(pred_ges)
-                #print(pred)
-                #pred_ges=pred_ges.tolist()
-                #index= pred_ges.index(pred)
-                #gesture=names[index]
-                print("The prediction is : ",pred_ges)
-                cv2.imshow("Resized Image in RGB",image)
+                #print(pred_ges)
+                pred_ges=pred_ges.tolist()
+                maxele=max(pred_ges[0])
+                #print('Max is : ',pred)
+                index= pred_ges[0].index(maxele)
+                #print("Index is : ",index)
+                gesture=names[index]
+                #print("The prediction is : ",gesture)
+                #cv2.imshow("Resized Image in RGB",image)
                 cv2.imshow("Binary Threshold",thres)
-                #cv2.imshow("2 Threshold",thres2)
+                cv2.drawContours(crop,segment, -1, (0, 255, 25),3)
+                cv2.putText(frame,gesture,(370,120),font,1,(0,70,250),2,cv2.LINE_AA)
 
 
         cv2.imshow('Live Feed',frame)
-        cv2.imshow('Cropped',crop)
+        #cv2.imshow('Cropped',crop)
 
         keypress = cv2.waitKey(2) & 0xFF
         if keypress == ord("q"):
