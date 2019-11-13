@@ -1,0 +1,11 @@
+Gestures,Actions
+1,MouseMovement
+2,LeftClick
+3,ScrollUp
+4,ScrollDown
+5,WindowsKey
+Fist,RightClick
+None,None
+OK,DoubeClick
+Palm,StopMedia
+SpiderMan,None

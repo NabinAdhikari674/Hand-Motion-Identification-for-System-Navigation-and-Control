@@ -1,0 +1,8 @@
+Variables,Values
+gesturePredictMode,TRUE
+uiControlMode,True
+modelToBeUsed,models/9G_tanh_model_105906112019.h5
+modelUsed,models/9G_tanh_model_105906112019.h5
+dX,103
+dY,114
+direction,Null
