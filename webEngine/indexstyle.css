@@ -1,0 +1,806 @@
+body
+{
+
+/*background-color: #121212;*/
+/*background-color: white;*/
+background-image: url("black2.jpg");*/
+min-height: 1000px;
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+
+}
+.scrolled{
+top:0px;
+z-index:5;
+width:100%;
+float:left;
+margin-left:0px;
+background-color: #121212;
+
+animation-name: navscroll;
+animation-duration: 0.1s;
+animation-iteration-count: 1;
+}
+@keyframes navscroll {
+from{
+
+margin-right: -72%;
+}
+
+to{
+margin-right:0;
+
+}
+}
+th, td {
+width:150px;
+text-align:center;
+border:2px solid black;
+padding:5px;
+color:black;
+
+}
+input{
+border: 2px solid green;
+border-radius: 5px;
+}
+
+.movegesturetable{
+position:absolute;
+float:right;
+left:900px;
+top:2310px;
+
+height:350px;
+overflow:auto;
+animation-name: gesturetable;
+animation-duration: 0.4s;
+animation-iteration-count: 1;
+
+}
+@keyframes gesturetable {
+from{
+
+left:500px;
+}
+
+to{
+left:900px;
+
+}
+}
+.callgesturetable{
+  float:left;
+  margin-left:10px;
+  animation-name: callgesturetable;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+
+}
+@keyframes callgesturetable {
+from{
+
+margin-left:400px;
+}
+
+to{
+margin-left:10px;
+
+}
+}
+
+
+#parallax {
+background-image: url("a6.jpg");
+
+
+min-height: 500px;
+
+/* Create the parallax scrolling effect */
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+.welcome1{
+position:absolute;
+color:#61892F;
+z-index: 1;
+margin-left:42%;
+padding-left:14px;
+margin-top:250px;
+animation-name: welcome;
+animation-duration: 1.5s;
+animation-iteration-count: 1;
+
+transition:2s;
+
+
+}
+.welcome1:hover{
+margin-top:235px;
+}
+@keyframes welcome{
+0%{
+margin-top:-200px;
+
+
+}
+50%{
+margin-top:-50px;
+
+
+}
+100%{
+margin-top:250px;
+
+
+}
+
+}
+
+
+.welcome2{
+position:absolute;
+color:white;
+z-index: 1;
+padding-left:80px;
+margin-top:270px;
+margin-left:28%;
+padding-top:50px;
+font-size:12px;
+width:600px;
+
+overflow-x: none;
+animation-name: welc;
+animation-duration: 1.5s;
+animation-iteration-count: 1;
+
+transition:1s;
+}
+.welcome2:hover{
+margin-top:260px  ;
+}
+@keyframes welc{
+0%{
+opacity:0;
+margin-left:28%;
+overflow-x: none;
+}
+33.33%{
+opacity:0.4;
+margin-left: 24%;
+
+
+overflow-x: none;
+
+}
+66.67%{
+opacity:0.7;
+margin-left:30%;
+
+}
+100%{
+opacity:1;
+margin-left:28%;
+}
+}
+
+p.down{
+
+position:absolute;
+color: #C3073F;
+text-align:center;
+font-size:12px;
+
+padding:2px;
+border:2px solid #C3073F;
+border-radius:25px;
+z-index: 1;
+width:150px;
+cursor: pointer;
+margin-top:390px;
+margin-left:44.5%;
+animation-name: explore;
+animation-duration: 1.5s;
+animation-iteration-count:1;
+transition:1s;
+}
+@keyframes explore{
+0%{
+margin-top:1000px;
+}
+100%{
+margin-top:390px;
+
+}
+}
+
+p.down:hover
+{
+color:white;
+background-color: #C3073F;
+margin-top: 375px;
+}
+.content{
+color:#C3073F;
+background-color: white;
+font-family:Times New Roman;
+padding:8px;
+}
+.hide-image{
+height:200px;
+margin-top:180px;
+width:300px;
+background-color:white;
+float:left;
+cursor:pointer;
+border-radius:10px;
+border: 1px solid #ddd;
+animation-name: thisimage;
+animation-duration: 5s;
+animation-iteration-count:1;
+transition:1s;
+
+}
+@keyframes thisimage {
+
+  0%{
+    margin-left:-5%;
+
+
+  }
+  20%{
+    margin-left:0%;
+
+
+  }
+  40%{
+    margin-left:5%;
+
+
+  }
+  60%{
+    margin-left:10%;
+
+  }
+  80%{
+    margin-left:20%;
+
+
+  }100%{
+    margin-left:2%;
+  }
+
+}
+
+.extra{
+
+background-color:white;
+
+
+height:180px;
+margin-top:-170px;
+width:300px;
+border-radius:10px;
+}
+.hide-image:hover{
+margin-top:160px;
+transition:.5s;
+}
+.image1 img{
+border: 1px solid #ddd;
+border-radius: 4px;
+border-radius:10px 10px 0 0;
+height:100px;
+width:300px;
+}
+.sidebar {
+height: 100%;
+width: 0;
+position: fixed;
+z-index: 1;
+top: 0;
+left: 0;
+background-color:#222629;
+margin-top:0px;
+overflow-x: hidden;
+transition: 0.5s;
+padding-top: 50px;
+}
+
+.sidebar a {
+padding: 8px 8px 8px 32px;
+text-decoration: none;
+font-size: 25px;
+color: #818181;
+display: block;
+transition: 0.3s;
+}
+
+.sidebar a:hover {
+color: #f1f1f1;
+}
+
+.sidebar .closebtn {
+position: absolute;
+top: 0;
+right: 30px;
+font-size: 36px;
+margin-left: 5px;
+}
+
+.openbtn {
+
+background-color:none;
+position:fixed;
+margin-top: 0px;
+font-size: 26px;
+cursor: pointer;
+color:white;
+display:block;
+float:left;
+z-index: 9999 !important;
+padding-left: 15px;
+padding-right: 15px;
+padding-bottom: 7px;
+padding-top: 7px;
+border:none;
+}
+
+.openbtn:hover {
+color:#66FCF1;
+
+}
+#navs{
+
+z-index:1;
+float:right;
+margin-right: 0px;
+padding-left:0px;
+padding-top:0px;
+margin-top: 0px;
+padding-bottom:-100px;
+
+
+
+}
+#navhome:hover{
+color:#66FCF1;
+}
+#navgesture:hover{
+color:#66FCF1;
+}
+#navaction:hover{
+color:#66FCF1;
+}
+#navmodel:hover{
+color:#66FCF1;
+}
+
+
+.home-div{
+background-image: url("black1.jpg");
+opacity:0.9;
+border-radius: 10px;
+}
+.home-title{
+
+background-color:none;
+
+color:#950740;
+border:none;
+border-radius: 5px;
+float:inherit;
+postion:absolute;
+margin-left:35%;
+margin-top:10px;
+cursor: pointer;
+width:360px;
+height:90px;
+padding-bottom:5px;
+box-shadow:0px 0px 20px  #64767C;
+transition: 2s;
+animation-name: well;
+animation-duration: 4s;
+animation-iteration-count: 1;
+
+transition:2s;
+
+
+}
+@keyframes well{
+0%{
+margin-top: :-100px;
+
+
+}
+
+100%{
+margin-bottom:10px;
+
+
+}
+
+}
+
+.homef{
+
+
+margin-top:160px;
+float:left;
+margin-left:200px;
+transition: 2s;
+
+}
+
+
+
+.information-box{
+background:transparent;
+margin-right:10%;
+float:right;
+overflow:hidden;
+width:25%;
+
+border-color:brown;
+height:400px;
+margin-top:30px;
+cursor:pointer;
+
+border-radius:10px;
+transition:2s;
+}
+.gesture-div{
+  background-color:black;
+  height:600px;
+    margin-left: 0%;
+}
+.gesture-box{
+margin-right:10%;
+float:right;
+overflow:hidden;
+width:60%;
+background-color: #FFFAFA
+
+height:400px;
+margin-top:30px;
+cursor:pointer;
+
+border-radius:10px;
+transition:2s;
+
+}
+.action-box{
+margin-left:2%;
+float:left;
+overflow:hidden;
+width:60%;
+border-color:#825e57;;
+height:400px;
+margin-top:30px;
+cursor:pointer;
+background-color:#E9E8EE;
+border-radius:10px;
+transition:2s;
+
+}
+@media screen and (max-width:900px){
+.home-title{
+margin-left:15%;
+width:40%;
+height:20%;
+transition:2s;
+}
+.homef{
+margin-left:5%;
+height:100%;
+transition:2s;
+
+}
+.information-box{
+float:right;
+margin-right:0px;
+width:50%;
+transition:2s;
+}
+.welcome1 {
+margin-left:42%;
+width:60%;
+height:100%;
+transition:2s;
+}
+.welcome2 {
+margin-left:15%;
+width:60%;
+height:100%;
+transition:2s;
+}
+}
+@media screen and (max-width: 520px){
+.home-title{
+margin-left:2%;
+width:30%;
+}
+.welcome1{
+margin-left:42%;
+height:100%;
+width:100%;
+}
+.welcome2{
+height:100%;
+width:100%;
+}
+.down{
+margin-left:45%;
+transition:2s;
+
+}
+.information-box{
+float:left;
+margin-left:2%;
+width:20%;
+height:60%;
+transition:2s;
+}
+}
+
+
+
+
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+.sidebar {padding-top: 15px;}
+.sidebar a {font-size: 18px;}
+}
+.switch {
+position: relative;
+display: inline-block;
+width: 70px;
+height: 23px;
+}
+
+.switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+transition: 0.1s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height:15px;
+width: 15px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+
+transition: 0.1s;
+}
+
+input:checked + .slider {
+background-color: #950740;
+}
+
+input:focus + .slider {
+box-shadow: 0 0 5px #950740;
+}
+
+input:checked + .slider:before {
+
+transform: translateX(45px);
+}
+
+
+.slider {
+border-radius: 53px;
+}
+
+.slider:before {
+border-radius: 100%;
+}
+.addgesdiv{
+    display:none;
+    border:2px solid black;
+    border-radius:5px;
+    height:300px;
+    width:350px;
+    margin-top:10px;
+    background-color:green;
+    text-align:center;
+
+
+}
+#G{
+  float: left;
+  margin-top:50px;
+  margin-left:10px;
+}
+.loader {
+margin:inherit;
+border: 6px solid #f3f3f3;
+border-radius: 100%;
+border-top: 4px solid #3498db;
+width: 30px;
+height: 30px;
+animation: spin 0.9s linear infinite;
+}
+.g1class{
+  float:right;
+  background-color: green;
+  height:300px;
+  margin-top:10px;
+  margin-right:337px;
+  width:20px;
+  animation-name:g1anime;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+
+}
+@keyframes g1anime{
+  from{
+    height:300px;
+    width:350px;
+    margin-top:10px;
+
+  }
+  to{
+
+    margin-top:10px;
+    margin-right:337px;
+    width:20px;
+
+  }
+}
+.g2class{
+  float:right;
+  background-color: green;
+  height:300px;
+  margin-top:10px;
+  margin-right:2px;
+  width:20px;
+  animation-name:g2anime;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+
+}
+@keyframes g2anime{
+  from{
+    height:300px;
+    width:350px;
+    margin-top:10px;
+
+  }
+  to{
+
+    height:300px;
+    margin-top:10px;
+    margin-right:2px;
+    width:20px;
+
+  }
+}
+.g3class{
+  float:right;
+  background-color: green;
+  height:300px;
+  margin-top:10px;
+  margin-right:2px;
+  width:20px;
+  animation-name:g3anime;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+
+}
+@keyframes g3anime{
+  from{
+    height:300px;
+    width:350px;
+    margin-top:10px;
+
+  }
+  to{
+
+    height:300px;
+    margin-top:10px;
+    margin-right:2px;
+    width:20px;
+
+  }
+}
+.g3class{
+  float:right;
+  background-color: green;
+  height:300px;
+  margin-top:10px;
+  margin-right:2px;
+  width:20px;
+  animation-name:g3anime;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+
+}
+@keyframes g3anime{
+  from{
+    height:300px;
+    width:350px;
+    margin-top:10px;
+
+  }
+  to{
+
+    height:300px;
+    margin-top:10px;
+    margin-right:2px;
+    width:20px;
+
+  }
+}
+.g3class{
+  float:right;
+  background-color: green;
+  height:300px;
+  margin-top:10px;
+  margin-right:2px;
+  width:20px;
+  animation-name:g3anime;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+
+}
+@keyframes g3anime{
+  from{
+    height:300px;
+    width:350px;
+    margin-top:10px;
+
+  }
+  to{
+
+    height:300px;
+    margin-top:10px;
+    margin-right:2px;
+    width:20px;
+
+  }
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+img{
+box-shadow: 0 0 8px 8px black inset;
+}
+.carousel-inner img {
+opacity:1;
+width: 100%;
+height: 700px;
+box-shadow: 0 0 8px 8px black inset;
+}
+.carousel slide
+{
+width: 100%;
+height: 100%;
+}
