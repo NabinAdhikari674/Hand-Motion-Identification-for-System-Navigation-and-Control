@@ -52,8 +52,8 @@ Chrome browser installed or as a webpage in a default browser on both cases.
 fast. After the application starts, the main console of the project also starts, and the GUI is completely loaded before performing 
 any other tasks. After its complete loading, it looks as following :  
 
-![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/FrontPage.PNG)
-				Fig 16 : Front Page of GUI
+![Front Page of GUI](https://github.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/blob/master/webEngine/sources/FrontPage.PNG)
+							*Fig 1 : Front Page of GUI*
 
   This is the front page of GUI after a successful loading of the application. There is an image slider in the forefront with a
 welcoming text in its center and a transparent navigation bar on the top. Transparent navigation bar is at the complete right which 
@@ -65,8 +65,8 @@ Three-layer element in left of the navigation bar is a button for opening sideba
 About Us, etc. to make the user freer to explore application more deeply.
 As we scroll further, the GUI looks like this:
 
-![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/Home.PNG)
-				Fig 17 : UI Of Home page
+![UI Of Home page](https://github.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/blob/master/webEngine/sources/Home.PNG)
+							*Fig 2 : UI Of Home Page*
 
 This is the Home page which contains the main aspect of this application. A button and a slider are at its left with some description 
 for what these all signify. The ‘Start Detection’ button calls a python function as you click to open camera for detection of your hand 
@@ -75,8 +75,8 @@ function for navigating window based on the action assigned to a particular hand
 however is applied when you restart the camera (closing the present session of camera, but not exiting the application). 
 As we scroll further GUI looks like following:
     
-![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/GESTURES.PNG)
-				Fig 18 : UI Of Gesture page
+![UI Of Gesture Page](https://github.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/blob/master/webEngine/sources/GESTURES.PNG)
+							*Fig 3 : UI Of Gesture Page*
 
 This is the Gesture page which contains aspects related to the gestures, actions, addition of new gestures, trainings etc. Two 
 buttons ‘View Gesture’ and ‘Add Gesture’ are present on the left side of the division. The ‘View Gesture’ button displays the gestures 
@@ -89,8 +89,8 @@ classify gestures along with the newly added gesture. After completing the serie
 
 As we scroll further GUI looks like following :
 
-![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/ACTIONS.PNG)
-				Fig 19 : UI Of Action page
+![Fig 4 : UI Of Action Page](https://github.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/blob/master/webEngine/sources/ACTIONS.PNG)
+							*Fig 4 : UI Of Action Page*
 
 This is the Action page which contains aspects related to the gestures, actions, assigning a new action, editing existing 
 actions, trainings etc. Two buttons ‘Assign Action’ and ‘Add Gesture’ are present on the right side of the division. The button 
