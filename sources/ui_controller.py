@@ -1,11 +1,13 @@
 import pyautogui, sys
 import global_var_tunnel as gv
+from collections import deque
+
 print("============= UI Controller Imported ==========")
 gestures,actions,infoDict = gv.get_global_values('Gestures','information')
+print(infoDict)
+actionList = deque(maxlen=12)
 #print(infoDict)
 (sizex,sizey) = pyautogui.size()
-
-
 
 def mouseMovement(a=0,b=0):
     global sizex,sizey
@@ -30,7 +32,6 @@ def mouseMovement(a=0,b=0):
     except Exception as exp:
         pass
         #print ('ERROR in mcontroller.py!!\n\tError:\n\t',exp)
-
 
 def mouseDrag(a=0,b=0,drag=None):
     global sizex,sizey
@@ -61,7 +62,8 @@ def mouseScroll(scroll=None,ticks=10):
         pyautogui.scroll(ticks)
     if scroll=='down':
         pyautogui.scroll(-ticks)
-def keybordFunction(key=None):
+
+def keyBoardFunction(key=None):
     if(key=='shift'):
         pyautogui.keyDown('shift')
     if(key=='enter'):
@@ -133,26 +135,51 @@ def keybordFunction(key=None):
 
 def mainController(gesture=None):
     #print('Gesture : ',gesture)
-    action=infoDict[gesture]
-    action='MouseMovement'
-    #print("Action : ",action)
-    if action == 'MouseMovement':
-        a = int(gv.get_global_values('dX','global')[0])
-        b = int(gv.get_global_values('dY','global')[0])
-        mouseMovement(-a,b)
-    #if gesture=='2':
-    #    mouseClick('left')
-    #if gesture=='3':
-    #    mouseClick('right')
-    #if gesture=='4':
-    #    mouseScroll('top')
-    #if gesture=='5':
-    #    mouseScroll('down')
-    #if gesture=='ok':
-    #   keyBoardFunction()
+    action = infoDict[gesture]
+    actionList.appendleft(action)
+    if list(actionList)[:-6].count(action) >=5 :
+        print(action)
+        actionList.clear()
+        print(actionList)
 
-
-
-
-#while True:
-#    mainController('1',2,3)
+        if action == 'MouseMovement':
+            a = int(gv.get_global_values('dX','global')[0])
+            b = int(gv.get_global_values('dY','global')[0])
+            mouseMovement(-a,b)
+        if action == 'WindowsKey':
+            keyBoardFunction('win')
+        if action == 'Play/Pause (Media)':
+            keyBoardFunction('playpause')
+        if action == 'PreviousTrack (Media)':
+            keyBoardFunction('prevtrack')
+        if action == 'NextTrack (Media)':
+            keyBoardFunction('nexttrack')
+        if action == 'FullScreen (Browser)':
+            keyBoardFunction('f11')
+        if action == 'Refresh (Browser)':
+            keyBoardFunction('browserrefresh')
+        if action == 'Forward (Browser)':
+            keyBoardFunction('browserforward')
+        if action == 'Backward (Browser)':
+            keyBoardFunction('browserback')
+        if action == 'Search (Browser)':
+            keyBoardFunction('browsersearch')
+        if action == 'Home (Browser)':
+            keyBoardFunction('browserhome')
+        if action == 'Home (KeyBoard)':
+            keyBoardFunction('home')
+        if action == 'ScrollUp':
+            mouseScroll('top')
+        if action == 'ScrollDown':
+            mouseScroll('down')
+        if action == 'CapsLock':
+            keyBoardFunction('capslock')
+        if action == 'RightClick':
+            mouseClick('right')
+        if action == 'LeftClick':
+            mouseClick('right')
+        if action == 'DoubleClick':
+            mouseClick('left')
+            mouseClick('left')
+        if action == 'MouseDrag':
+            mouseDrag(1,1)
