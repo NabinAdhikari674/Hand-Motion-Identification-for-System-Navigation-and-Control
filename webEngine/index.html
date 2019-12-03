@@ -1,4 +1,3 @@
-# Main WebPage acting as the GUI of the Project
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,11 +49,10 @@
 
     <div id="mySidebar"  class="sidebar">
         <a href="JavaScript:Void(0);" class="closebtn" onclick="closeNav()">×</a>
-        <a href="#">View Files</a>
-        <a href="#">User Manual</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
+        <a href="#" class='userManual-button'onclick="closeNav()">User Manual</a>
+        <a href="#" class='aboutInfo-button'onclick="closeNav()">About</a>
+        <a href="#" class='aboutInfo-button'onclick="closeNav()">Services</a>
+        <a href="#" class='aboutInfo-button'onclick="closeNav()">Contact</a>
     </div>
 
         <div style="margin-top:-50px; z-index:0; " id="myCarousel"  class="carousel slide" data-ride="carousel">
@@ -70,13 +68,13 @@
                 <!-- The slideshow -->
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img src="hand1.jpg" alt="image not found" style=" box-shadow: 0 0 20px 8px black inset;">
+                    <img src="sources/carousel1.jpg" alt="image not found1" style=" box-shadow: 0 0 20px 8px black inset;">
                   </div>
                   <div class="carousel-item">
-                    <img src="hand4.jpg" alt="image not found" >
+                    <img src="sources/carousel2.jpg" alt="image not found2" >
                   </div>
                   <div class="carousel-item">
-                    <img src="hand4.jpg" alt="image not found">
+                    <img src="sources/carousel3.jpg" alt="image not found3">
                   </div>
                 </div>
                 <!-- Left and right controls -->
@@ -103,7 +101,7 @@
 
     <div class="hide-image" style="margin-left:2%;">
         <div class="explore1"  >
-          <div class="image1"><img src="hand6.jpg" alt="image not found"></div>
+          <div class="image1"><img src="sources/explore1.jpg" alt="image not found"></div>
           <div class="content" style="font-family: Times New Roman;"><strong>Navigate through this application easily .This manual will guide you through this application for your every confusion.</strong></div>
         </div>
         <div class="extra">
@@ -111,7 +109,7 @@
     </div>
     <div class="hide-image" style="margin-left:2%; " >
         <div class="explore1"  >
-          <div class="image1" ><img src="hand3.jpg" alt="image not found"></div>
+          <div class="image1" ><img src="sources/explore2.jpg" alt="image not found"></div>
           <div class="content" style="font-family: Times New Roman; "><strong>Navigate through this application easily .This manual will guide you through this application for your every confusion.</strong></div>
         </div>
         <div class="extra">
@@ -119,7 +117,7 @@
     </div>
     <div class="hide-image" style="margin-left:2%; " >
         <div class="explore1"  >
-          <div class="image1" ><img src="hand5.jpg" alt="image not found"></div>
+          <div class="image1" ><img src="sources/explore3.jpg" alt="image not found"></div>
           <div class="content" style=""><strong>Navigate through this application easily .This manual will guide you through this application for your every confusion.</strong></div>
         </div>
         <div class="extra">
@@ -127,7 +125,7 @@
     </div>
     <div class="hide-image" style="margin-left:2%;">
         <div class="explore1"  >
-          <div class="image1"><img src="hand6.jpg" alt="image not found"></div>
+          <div class="image1"><img src="sources/explore4.jpg" alt="image not found"></div>
           <div class="content" style="font-family: Times New Roman;"><strong>Navigate through this application easily .This manual will guide you through this application for your every confusion.</strong></div>
         </div>
         <div class="extra">
@@ -171,24 +169,24 @@
 
 <hr style="color:#146075; margin-top:500px; height:2px; ">
 
-          <div class="container">
-            <div class="modal fade" id="myModal" >
+          <div class="container"style="border:none;">
+            <div class="modal fade" id="myModal" style="border:none;">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
 
-                  <div class="modal-header" style="background-color:#146075;">
-                    <h4 class="modal-title"style="background-color:none;">Opening camera</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <div class="modal-header" style="background-color:#950740;">
+                    <h4 class="modal-title"style="background-color:none; color:white;">Opening camera</h4>
+                    <button type="button" class="close" style=" color:white;" data-dismiss="modal">&times;</button>
                   </div>
 
 
-                  <div class="modal-body" style="color:#146075;background-color:#E9E8EE;">
+                  <div class="modal-body" style="color:#950740;background-color:#E9E8EE;">
                     Show your Hand towards Camera inside the "Region of Interest".
                   </div>
 
 
-                  <div class="modal-footer" style="background-color:#E9E8EE;">
-                    <button type="button" class="btn btn-secondary" onclick="openca()" data-dismiss="modal" style="background-color:#146075;">Open</button>
+                  <div class="modal-footer" style="background-color:#950740;">
+                    <button type="button" class="btn btn-secondary" onclick="openca()" data-dismiss="modal" style="background-color:white; color:#950740;">Open</button>
                   </div>
 
                 </div>
@@ -196,7 +194,7 @@
             </div>
          </div>
 
-          <div class="gesture-div" style="padding-left: 50px; padding-top:50px;">
+          <div class="gesture-div" style="padding-left: 50px; padding-top:50px;opacity:0.9;margin:50px;border-radius:10px;">
 
                     <div class="" style=" width:100px; margin-left:100px; margin-top:100px;">
 
@@ -257,7 +255,7 @@
               <div id ="loader7" class="loader" style="display:none;   margin-top:60px; margin-left:50%;" >
               </div>
             </div>
-          <button type="button" name="button" id="G8" class="btn btn-secondary"  style="display:none;"onclick="addModelDone()"style="margin-bottom:5px;" >Done.</button>
+          <button type="button" name="button" id="G8" class="btn btn-secondary"  style="display:none; border:none;width:100px; margin-top:30px;background-color:#825e57;"onclick="addModelDone()"style="margin-bottom:5px;" >Done.</button>
 
         </div>
               <div id="tablediv">
@@ -276,94 +274,226 @@
 </div>
 
 <hr style="margin-top:500px;">
-              <div class="action-div" style="padding-left: 50px; padding-top:50px;">
-              <div class="action-box" style="margin-top:10px;"></div>
-              <div id="tablediv2" style="float:left;margin-left:-580px; margin-top:20px; color:black;">
-                        <table id="actiontable" cellpadding="2" style="margin:10px; border:2px solid white; display:flex; ">
+
+              <div class="action-div" style="margin-top:10px; margin-left:3%; margin-right:3%; background-color:black;">
+              </div>
+
+              <div id="tablediv1" class="table2"  style="">
+                        <table id="actiontable"   cellpadding="2" style="margin:10px;  display:flex; z-index: 1;">
+
                           <tr>
                             <th>Gesture</th>
                             <th>Action</th>
-                        </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>None</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>None</td>
+                          </tr>
 
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>None</td>
 
-                        </tr>
-                        <tr>
-                          <td>4</td>
-                          <td>None</td>
-
-                        </tr>
-                        <tr>
-                          <td>5</td>
-                          <td>None</td>
-                        </tr>
-                        <tr>
-                          <td>fist</td>
-                          <td>None</td>
-                        </tr>
-                        <tr>
-                          <td>palm</td>
-                          <td>None</td>
-                        </tr>
-                        <tr>
-                          <td>None</td>
-                          <td>None</td>
-                        </tr>
                          </table>
-                            <p id ="pest"></p>
-                            <p id ="pest1"></p>
-                            <p id ="pest2"></p>
-              </div>
-                   <button type="button" class="btn btn-secondary" style="background-color:#825e57; float:right; margin-right:15%; margin-top:100px; border:none; width:150px;margin-bottom:10px; color:white; background-color:#C3073F;">Assign Action</button>
-                   <button type="button" class="btn btn-secondary" style="background-color:#825e57;float:right; margin-right:15%;width:150px; color:white;  border:none; background-color:#C3073F;">Edit Actions</button>
-              </div>
+
+
+              </div >
+              <div class="addactionbtn" style=" float: left; margin-left:30%; margin-top:-400px; ">
+                <table  id="actiontable2" cellpadding="2" style="margin:20px; margin-left:0px; display:none;overflow:auto;">
+                  <tr>
+                    <th> Available Actions</th>
+                  </tr>
+                </table>
+             <p id="actionbtn3" style="display:none;" >
+              <button type="button" class="btn btn-secondary" onclick="choosegesture()" style="background-color:#825e57; float:left; margin-left:28%; margin-top:10px; border:none; width:150px;margin-bottom:10px; color:white; background-color:#C3073F;">Choose Gesture</button>
+              <span  id="spangesture"style="color:white; float:right; width:100px; margin-right:30%; margin-top:10px; font-style:italic;"></span>
+              <button type="button" class="btn btn-secondary" onclick="chooseaction()" style="background-color:#825e57;float:left; margin-left:28%;width:150px; color:white;margin-bottom:10px;  border:none; background-color:#C3073F;">Choose Actions</button>
+              <span  id="spanaction"style="color:white; float:right; width:100px; margin-right:30%; margin-top:0px; font-style:italic;"></span>
+              <button type="button" class="btn btn-secondary" onclick="savechange()" style="background-color:#825e57; float:left; margin-left:28%;  border:none; width:150px;margin-bottom:10px; color:white; background-color:#C3073F;">Save Change</button>
+</p>
+            </div>
+
+                   <button id="btnview1" type="button" class="btn btn-secondary" onclick="viewaction()" style="background-color:#825e57; float:right; margin-right:5%; margin-top:50px; border:none; width:150px; margin-bottom:10px; color:white; background-color:#C3073F;">View Action</button>
+                   <button id="btnedit1" type="button" class="btn btn-secondary" onclick="editaction()" style="background-color:#825e57;float:right; margin-right:-11.5%;width:150px;margin-top:100px; color:white;  border:none; background-color:#C3073F;">Edit Actions</button>
 
 <hr style="margin-top:500px; ">
-            <div class="model-div" style="padding-left: 50px; margin-left:30%; padding-top:50px;">
+            <div class="model-div" style="padding-left: 50px; margin:3%;opacity: 0.9;padding-top:50px; height:500px; border-radius: 10px; background-color:black;">
+            <button type="button" class="btn btn-secondary" name="button" onclick="refreshModel()" style="background-color:#C3073F;margin-top:100px; border:none; width:150px; " >Refresh</button>
+              <div class="" style="  margin-left:40%; margin-top:-50px; color:#825e57;">
+                   <p>Model Path : <span id="modelpath" style="color:white;"></span> </p>
+                   <p style="margin-bottom:20px;" >Current Model : &nbsp;&nbsp; <span id="currentmodel"  style="color:white;"> </span></p>
+                   <p >Choose Another : &nbsp;<select name="model" id="selectmodel" style="width:100px;">
 
-              <div class="" style=" width:350px; margin-left:100px; margin-top:100px; color:#825e57;">
-
-                   <p style="margin-bottom:20px;" >Current Model: &nbsp;&nbsp; <input type="text" name=""></p>
-                   <p >Choose Another:&nbsp;<input type="text" name=""></p>
-                     <button type="button" class="btn btn-secondary" style="background-color:#825e57; float:right;margin-right:15%; margin-top:50px; border:none; width:150px;margin-bottom:10px;">Retrain Model</button>
-                      Information console:
+                                           </select>
+                     <button type="button" class="btn btn-secondary" onclick="changeModel()" style="background-color:#825e57; float:right; margin-right:78%; margin-top:40px; border:none; width:150px;margin-bottom:10px;">Change Model</button>
 
               </div>
             </div>
 
 
+<hr style="margin-top:500px; ">
+              <div class="userManual" style=" margin:3%;overflow: auto; padding-top:50px; height:500px; border-radius: 10px; background-color:black;opacity:0.9;">
+                <h3 style="margin-left: 100px;color:pink;" >User Manual :</h3>
+                <pre style="color:white;">
+                    This product was made as an experiment and was not intended to be
+                  used for a daily use case an HCI tool. The product is preferred to be used in a
+                  controlled environment where the background is not usually changing or is
+                  static. The main application shall be distributed either as a Folder containing all
+                  the source codes or, as an executable file. The source codes have three main
+                  folders in the main root folder, namely, ‘generatedData’, ‘webEngine’ and
+                  ‘sources’. The ‘generatedData’ folder is utilized to save all the generated data
+                  during the workflow of the product. The ‘webEngine’ folder consists of the web
+                  pages or files required for the GUI of the application. The ‘sources’ folder
+                  consists of all the python source codes and database used in the backend of the
+                  application. In the case of source codes, we have to move to the ‘sources’ subfolder
+                  inside the main root folder. Inside the ‘source’ folder there is a python file named
+                  ‘main.py’ which is the main file to be run. In this case, the user
+                  should have all the dependencies and packages required for the project
+                  (probable provided in a ‘requirements.txt’ file). We must run the ‘main.py’ file
+                  either by using command line or any python interpreter or IDE. After ‘main.py’
+                  is run, the loading starts. While on a project distributed as an executable file, we
+                  just have to open the executable file and the project starts loading. The GUI
+                  page of the application opens as a web-app if the user has Google Chrome
+                  browser installed or as a webpage in a default browser on both cases.
 
-<div style="width:100%; background-color:#146075; height:100px; margin-bottom:0px;   margin-top:800px; border:none;" id="footer">
+                    The initial load of the GUI takes a little bit of time (on average 12
+                  seconds) but after that (after initial load), the GUI loads very fast. After the
+                  application starts, the main console of the project also starts, and the GUI is
+                  completely loaded before performing any other tasks. After its complete
+                  loading, it looks as following :
+                                              Fig 16 : Front Page of GUI
+                  This is the front page of GUI after a successful loading of the application. There
+                  is an image slider in the forefront with a welcoming text in its center and a
+                  transparent navigation bar on the top. Transparent navigation bar is at the
+                  complete right which includes four key menus and a three-layer button at its
+                  complete left. The ‘Explore Now’ button in its center guides you through the
+                  application by scrolling the bar with a significant pixel value. All the buttons
+                  and elements in this window are responsive and represent different part and
+                  function in GUI. As you click element ‘Home’ of the navigation bar, the
+                  window will be scrolled down to the home division. This behavior is also similar
+                  for other elements where they will be scrolled down to their respective divisions.
+                  Three-layer element in left of the navigation bar is a button for opening sidebar
+                  which, contains some of the links like User Manual, About Us, etc. to make the
+                  user freer to explore application more deeply.
+                  As we scroll further, the GUI looks like this:
+                                            Fig 17 : UI Of Home page
+                  This is the Home page which contains the main aspect of this
+                  application. A button and a slider are at its left with some description for what
+                  these all signify. The ‘Start Detection’ button calls a python function as you
+                  click to open camera for detection of your hand gesture and motion. The
+                  ‘Control UI’switch can be toggled for controlling the UI for navigation. In ‘ON’
+                  state it starts the python function for navigating window based on the action
+                  assigned to a particular hand gesture and it ends as we switch to ‘OFF’ state.
+                  This however is applied when you restart the camera (closing the present session
+                  of camera, but not exiting the application).
+                  As we scroll further GUI looks like following:
+                                          Fig 18 : UI Of Gesture page
+                   This is the Gesture page which contains aspects related to the gestures,
+                  actions, addition of new gestures, trainings etc. Two buttons ‘View Gesture’
+                  and ‘Add Gesture’ are present on the left side of the division. The ‘View
+                  Gesture’ button displays the gestures and actions associated with it in a table.
+                  The ‘Add Gesture’ button displays an input box where we must enter the name
+                  of the gesture, we want to add so that we can modify and train the model to
+                  recognize the new gestures along with the predefined gestures. If the gesture
+                  name we entered, is already present then it will alert us to enter another unique
+                  name. After this, there are series of steps to be followed, so that the newly added
+                  gesture can be processed in a machine learning model that is modified and
+                  trained to recognize and classify gestures along with the newly added gesture.
+                  After completing the series of steps, we can view the updated gestures by
+                  clicking ‘View Gesture’ button which then displays updated gesture names and
+                  their associated actions in the table.
+                  As we scroll further GUI looks like following :
+                                          Fig 19 : UI Of Action page
+                   This is the Action page which contains aspects related to the gestures,
+                  actions, assigning a new action, editing existing actions, trainings etc. Two
+                  buttons ‘Assign Action’ and ‘Add Gesture’ are present on the right side of the
+                  division. The button ‘Assign Action’ displays the gestures and its associated
+                  action in the table that are already been in the product or we can say which are
+                  been properly trained. The ‘Assign Gesture’ button displays an input box where
+                  we must choose an action and assign it with a gesture present in the product
+                  system. Then after we choose any action available, there are series of steps to
+                  be followed so that the action can be assigned to a gesture. After this, we can
+                  again view the updated gestures and actions associated. Clicking the ‘Edit
+                  Action’ button also prompts us with series of steps to edit any action that is
+                  assigned to a gesture.
+               </pre>
+              </div>
 
+<hr style="margin-top:500px; ">
+              <div class="aboutInfo" style="overflow: auto; margin-right: 50px;padding-top:50px;  border-radius: 10px; background-color:black;opacity:0.9;">
+                <pre style="color:white;">
+                  <h5 style="margin-left: 100px;" >Creators :</h5>
+                          Nabin Adhikari                                          Email : nabinadhikari674@gmail.com
+                          Sushant Paudel                                          Email : sushantpdl31@gmail.com
+                          Sudhir Sah                                              Email : sudhirsah31@gmail.com
+
+                  <h5 style="margin-left: 100px;" >GitHub Link :</h5>
+                          https://github.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control
+
+
+
+                </pre>
+              </div>
+
+<div style="width:1500; background-color:black; opacity: 0.9; height:100px; margin-bottom:0px; margin-left:-100px;  margin-top:800px; border:none;">
 </div>
 
 <script type="text/javascript">
 
+function refreshModel(){
+
+  eel.currentModelUsed()(currentModelUsed);
+  eel.availableModels()(availableModels);
+}
+function currentModelUsed(a) {
+    document.getElementById("currentmodel").innerHTML=a;
+
+}
+function availableModels(a) {
+
+       document.getElementById("modelpath").innerHTML=a[1];
+
+       var y = a[0].toString();
+
+        y=y.replace(/['#[]/g,'');
+        y=y.replace(/]/g,'');
+        y=y.split(',');
+        var i=0;
+
+        for (i=0; i<y.length ;i++)
+        {
+          var a = document.getElementById("selectmodel");
+          var opt = document.createElement('option');
+
+          opt.appendChild( document.createTextNode(y[i]) );
+            opt.value = y[i];
+            a.appendChild(opt);
+
+        }
+}
+function changeModel() {
+  var b=document.getElementById("selectmodel").value;
+   var a=confirm ("Are you sure to change the model to be used in gesture classification (The model change will take affect on next camera restart.)");
+   if(a==true){
+     eel.changeModelToBeUsed(b);
+
+  }
+  else{
+     var flag=1;
+  }
+
+}
 function controlui() {
   var checkBox = document.getElementById("check");
   var text = document.getElementById("text");
   if (checkBox.checked == true){
     text.innerHTML = "ON";
+    eel.uiControlMode('ON');
 
   } else {
      text.innerHTML = "OFF";
+     eel.uiControlMode('OFF');
 
   }
 }
+
 function viewgesture(){
   eel.viewGesture()(gestureInfo);
-
 }
+
 var gestureInfo;
 function gestureInfo(a='k')
 {
@@ -376,9 +506,6 @@ function gestureInfo(a='k')
   y=y.replace(/]/g,'');
   y=y.split(',');
   var i=0;
-
-
-
 for (i=0; i<x.length ;i++)
 {
   var  p=document.getElementById('gesturetable');
@@ -389,10 +516,172 @@ for (i=0; i<x.length ;i++)
       newTD1.innerHTML = x[i];
       var newTD2 = newTR.insertCell(k);
       newTD2.innerHTML = y[i];
-    };
-
+  };
 gestureInfo=x;
 }
+
+function viewaction()
+{
+
+  eel.viewGesture()(actionInfo);
+}
+
+var actionInfo1;
+var gestureInfo1;
+function actionInfo(a='k')
+{
+ var x = a[0].toString();
+ var y = a[1].toString();
+  x=x.replace(/['#[]/g,'');
+  x=x.replace(/]/g,'');
+  x=x.split(',');
+  y=y.replace(/['#[]/g,'');
+  y=y.replace(/]/g,'');
+  y=y.split(',');
+  var i=0;
+  var a= document.getElementById('actiontable').rows.length;
+  if (a>1){
+  for (i=0; i<a ;i++)
+  {
+    if (i>0){ document.getElementById("actiontable").deleteRow(1); }
+  }
+  }
+  for (i=0; i<x.length ;i++)
+  {
+    var  p=document.getElementById('actiontable');
+    var j = 0;
+    var k = 1;
+    var newTR = p.insertRow(i+1);
+    var newTD1 = newTR.insertCell(j);
+    newTD1.innerHTML = x[i];
+    var newTD2 = newTR.insertCell(k);
+    newTD2.innerHTML = y[i];
+    };
+  gestureInfo1=x;
+
+}
+
+ function choosegesture(){
+
+   alert("You can choose the gestures from table alongside");
+
+   var cell = document.getElementById('actiontable');
+   var cells = cell.getElementsByTagName('td');
+
+   for(var i = 0; i <= cells.length; i++){
+    cells[i].addEventListener('click', clickHandler1);
+    cells[i].style.cursor="pointer";
+    cells[i].style.backgroundColor="skyblue";
+     }
+
+}
+function clickHandler1()
+{
+    var d=this.textContent;
+    var flag=0;
+    for (var i in gestureInfo1)
+    {
+      var bool = gestureInfo1[i].includes(d);
+      if (bool==true)
+      {
+        flag=1
+      }
+
+    }
+    if (flag==1)
+    {
+      document.getElementById("spangesture").innerHTML=this.textContent;
+
+    }
+
+   }
+
+
+
+ function chooseaction() {
+   alert("You can choose the action from table alongside");
+   var cell = document.getElementById('actiontable2');
+   var cells = cell.getElementsByTagName('td');
+
+   for(var i = 0; i <= cells.length; i++){
+    cells[i].addEventListener('click', clickHandler);
+    cells[i].style.backgroundColor="#950740";
+    cells[i].style.cursor="pointer";
+
+   }
+}
+ function clickHandler()
+ {
+  document.getElementById("spanaction").innerHTML=this.textContent;
+ }
+
+ function savechange(){
+  var a=document.getElementById("spangesture").innerHTML;
+   var b=document.getElementById("spanaction").innerHTML;
+   if(a=="" || b=="")
+   {
+     alert("Choose both gesture and action.");
+   }
+   else{
+   var c=confirm("Gesture: "+a +" "+"Action:"+b);
+   if(c==true){
+       eel.saveNewAction(a,b);
+      document.getElementById("spangesture").innerHTML="";
+      document.getElementById("spanaction").innerHTML="";
+   }else{
+    var flag=0;
+   }
+}
+
+ }
+
+
+function editaction() {
+    document.getElementById("actionbtn3").style.display="block";
+    document.getElementById("actiontable2").style.display="block";
+    document.getElementById("tablediv1").classList.remove("table2");
+    document.getElementById("tablediv1").classList.add("moveactiontable");
+    document.getElementById("btnview1").style.marginTop="-300px";
+    document.getElementById("btnedit1").style.marginTop="-250px";
+    document.getElementById("btnedit1").style.marginRight="5%";
+    eel.viewAction()(availableAction);
+
+  }
+function availableAction(a) {
+
+  var x = a.toString();
+  x=x.replace(/['#[]/g,'');
+  x=x.replace(/]/g,'');
+  x=x.split(',');
+  actionInfo1=x;
+  showaction();
+}
+
+function showaction(){
+  document.getElementById('actiontable2').style.overflow="auto";
+  document.getElementById('actiontable2').style.height="340px";
+  document.getElementById('actiontable2').style.width="160px";
+  document.getElementById('actionbtn3').style.marginTop="-350px";
+  y=actionInfo1;
+  var a= document.getElementById('actiontable2').rows.length;
+  if (a>1){
+  for (i=0; i<a ;i++)
+  {
+    if (i>0){ document.getElementById("actiontable2").deleteRow(1); }
+  }
+  }
+  for (i=0; i<y.length ;i++)
+  {
+    var  p=document.getElementById('actiontable2');
+        var j = 0;
+        var newTR = p.insertRow(i+1);
+        var newTD1 = newTR.insertCell(j);
+        newTD1.innerHTML = y[i];
+      };
+
+  }
+
+
 function opengesture()
 {
   document.getElementById("gesturetable").classList.add("movegesturetable");
@@ -428,9 +717,6 @@ function checkGestureName()
  function sendGestureName(a){
    eel.newGestureName(a);
    document.getElementById('G1').style.display='block';
-
-
-
  }
 
  function addGestureonNN()
@@ -576,6 +862,7 @@ function deletegesturevalue()
   document.getElementById("gesturevalue").value="";
   opengesture()
 }
+
 function openca(){
   eel.home11()
 }
@@ -621,32 +908,44 @@ function validate()
     scrollTop: $(".explore-div").offset().top
   }, 500)
 }),
+$('.userManual-button').click(function() {
+$('html, body').animate({
+
+scrollTop: $(".userManual").offset().top- $(window).height() +585
+}, 500)
+}),
+$('.aboutInfo-button').click(function() {
+$('html, body').animate({
+
+scrollTop: $(".aboutInfo").offset().top- $(window).height() +585
+}, 500)
+}),
 
   $('#navhome').click(function() {
   $('html, body').animate({
 
-    scrollTop: $(".home-div").offset().top- $(window).height() +585
+    scrollTop: $(".home-div").offset().top- $(window).height() + 615
   }, 300)
 }),
 
   $('#navgesture').click(function (){
     $('html, body').animate({
 
-      scrollTop: $(".gesture-div").offset().top
+      scrollTop: $(".gesture-div").offset().top- $(window).height() +615
     }, 300)
   }),
 
   $('#navaction').click(function (){
     $('html, body').animate({
 
-      scrollTop: $(".action-div").offset().top
+      scrollTop: $(".action-div").offset().top- $(window).height() +585
     }, 300)
   }),
 
   $('#navmodel').click(function (){
     $('html, body').animate({
 
-      scrollTop: $(".model-div").offset().top
+      scrollTop: $(".model-div").offset().top- $(window).height() + 585
     }, 300)
   })
 });
