@@ -3,7 +3,7 @@ body
 
 /*background-color: #121212;*/
 /*background-color: white;*/
-background-image: url("black2.jpg");*/
+background-image: url("sources/black2.jpg");*/
 min-height: 1000px;
 background-attachment: fixed;
 background-position: center;
@@ -37,11 +37,15 @@ margin-right:0;
 th, td {
 width:150px;
 text-align:center;
-border:2px solid black;
+border:2px solid white;
 padding:5px;
-color:black;
-
+color:white;
 }
+.mystyle1{
+
+  background-color: red;
+}
+
 input{
 border: 2px solid green;
 border-radius: 5px;
@@ -52,13 +56,41 @@ position:absolute;
 float:right;
 left:900px;
 top:2310px;
-
 height:350px;
 overflow:auto;
 animation-name: gesturetable;
 animation-duration: 0.4s;
 animation-iteration-count: 1;
 
+}
+
+.table2{
+float:left;
+margin-left:-620px;
+margin-top:20px;
+}
+
+.moveactiontable{
+float:left;
+margin-top:20px;
+margin-left:-850px;
+height:350px;
+overflow:auto;
+animation-name: actiontable;
+animation-duration: 0.4s;
+animation-iteration-count: 1;
+
+}
+@keyframes actiontable {
+from{
+
+margin-left: -580px;
+}
+
+to{
+margin-left:-850px;
+
+}
 }
 @keyframes gesturetable {
 from{
@@ -91,19 +123,6 @@ margin-left:10px;
 }
 }
 
-
-#parallax {
-background-image: url("a6.jpg");
-
-
-min-height: 500px;
-
-/* Create the parallax scrolling effect */
-background-attachment: fixed;
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
-}
 
 .welcome1{
 position:absolute;
@@ -332,7 +351,9 @@ right: 30px;
 font-size: 36px;
 margin-left: 5px;
 }
-
+.tablecol {
+  background-color: blue;
+}
 .openbtn {
 
 background-color:none;
@@ -383,7 +404,7 @@ color:#66FCF1;
 
 
 .home-div{
-background-image: url("black1.jpg");
+background-color:black;
 opacity:0.9;
 border-radius: 10px;
 }
@@ -474,7 +495,7 @@ border-radius:10px;
 transition:2s;
 
 }
-.action-box{
+.action-div{
 margin-left:2%;
 float:left;
 overflow:hidden;
