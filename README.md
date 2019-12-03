@@ -1,21 +1,38 @@
 # Hand-Gesture-Recognition or Hand Motion Identification for System Navigation and Control
 
-A real time video feed is analyzed for hand recognition and then trained for gesture recognition made through hands. The live video is fed through camera from devices that are connected to the model such as laptop and phones.The model uses machine learning techniques to train and predict the data i.e hand gestures. Python shall be the dominant programming language used along with Java and web languages for web deployment of the model. The model can also be deployed in Android phones. The output from the model can be used to control and direct various interfaces like mouse in computers, joysticks in gaming and even virtual simulation of the hand.
+A real time video feed is analyzed for hand recognition and then trained for gesture recognition made through hands. The live video is 
+fed through camera from devices that are connected to the model such as laptop and phones.The model uses machine learning techniques to 
+train and predict the data i.e hand gestures. Python shall be the dominant programming language used along with Java and web languages 
+for web deployment of the model. The model can also be deployed in Android phones. The output from the model can be used to control and 
+direct various interfaces like mouse in computers, joysticks in gaming and even virtual simulation of the hand.
 # Detailed Description :
 ## INTRODUCTION: 
-The project is titled “Hand Motion Identification for System Navigation and Control”. In this project, a real time video feed is analyzed for hand recognition and then trained for gesture and motion recognition made through hands. The live video is fed through camera from devices that are connected to the devices such as laptop and phones. The model uses machine learning techniques to train and predict the data i.e. hand gestures. Python shall be the dominant programming language used along with Java and web languages for web deployment of the model. The model can also be deployed in Android phones. The output from the model can be used to control and direct various interfaces like mouse in computers and joysticks in gaming.
+The project is titled “Hand Motion Identification for System Navigation and Control”. In this project, a real time video feed is 
+analyzed for hand recognition and then trained for gesture and motion recognition made through hands. The live video is fed through 
+camera from devices that are connected to the devices such as laptop and phones. The model uses machine learning techniques to train and 
+predict the data i.e. hand gestures. Python shall be the dominant programming language used along with Java and web languages for web 
+deployment of the model. The model can also be deployed in Android phones. The output from the model can be used to control and direct 
+various interfaces like mouse in computers and joysticks in gaming.
 
 ## OBJECTIVE: 
-We are going to experiment if various hand gestures and motions can be utilized to control various interfaces on a system. The effectiveness of this method to control various systems will be analyzed. The comparison between various methods of hand recognition, with result being best method suitable for the task in hand will be
+We are going to experiment if various hand gestures and motions can be utilized to control various interfaces on a system. The 
+effectiveness of this method to control various systems will be analyzed. The comparison between various methods of hand recognition, 
+with result being best method suitable for the task in hand will be
 
 ## STEPS: 
-The initial data is the video feed from camera captures in certain frame rates suitable. The images fetched from video will go through a series of pre-processing such as grey scale image conversion, image correction and binary image conversion. This data will be used to recognize hand, then motion and gesture detection in the image using various libraries such as OpenCV and Sklearn. This identification data can now be used to control interfaces in various systems by associating various gestures or motion of a hand to actions in various System Interface.
+The initial data is the video feed from camera captures in certain frame rates suitable. The images fetched from video will go through a 
+series of pre-processing such as grey scale image conversion, image correction and binary image conversion. This data will be used to 
+recognize hand, then motion and gesture detection in the image using various libraries such as OpenCV and Sklearn. This identification 
+data can now be used to control interfaces in various systems by associating various gestures or motion of a hand to actions in various 
+System Interface.
 
 ## LANGUAGES And LIBRARIES USED: 
-The programming language to be dominantly used is “Python”, probably version 3. Various libraries such as OpenCV, SkLearn, NumPy etc. will be used with python. The language used to control interfaces in various systems will be “Java”. If we decide to deploy the model using web technologies, various Web Languages can also be used.
+The programming language to be dominantly used is “Python”, probably version 3. Various libraries such as OpenCV, SkLearn, NumPy etc. 
+will be used with python. The language used to control interfaces in various systems will be “Java”. If we decide to deploy the model 
+using web technologies, various Web Languages can also be used.
 
 
-####The Model files(Json with NN Frame and H5 with Weights) are uploaded in G-Drive and the links will be shared later.
+### The Model files(Json with NN Frame and H5 with Weights) are uploaded in G-Drive and the links will be shared later.
 
 # User-Manual : 
 This product was made as an experiment and was not intended to be used for a daily use case an HCI tool. The product is preferred to be 
@@ -30,11 +47,12 @@ project (probable provided in a ‘requirements.txt’ file). We must run the �
 interpreter or IDE.  After ‘main.py’ is run, the loading starts. While on a project distributed as an executable file, we just have to 
 open the executable file and the project starts loading. The GUI page of the application opens as a web-app if the user has Google 
 Chrome browser installed or as a webpage in a default browser on both cases.
+
   The initial load of the GUI takes a little bit of time (on average 12 seconds) but after that (after initial load), the GUI loads very 
 fast. After the application starts, the main console of the project also starts, and the GUI is completely loaded before performing 
 any other tasks. After its complete loading, it looks as following :  
 
- 
+![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/FrontPage.PNG)
 				Fig 16 : Front Page of GUI
 
   This is the front page of GUI after a successful loading of the application. There is an image slider in the forefront with a
@@ -47,19 +65,20 @@ Three-layer element in left of the navigation bar is a button for opening sideba
 About Us, etc. to make the user freer to explore application more deeply.
 As we scroll further, the GUI looks like this:
 
- 
-Fig 17 : UI Of Home page
+![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/Home.PNG)
+				Fig 17 : UI Of Home page
 
-  This is the Home page which contains the main aspect of this application. A button and a slider are at its left with some description 
+This is the Home page which contains the main aspect of this application. A button and a slider are at its left with some description 
 for what these all signify. The ‘Start Detection’ button calls a python function as you click to open camera for detection of your hand 
 gesture and motion. The ‘Control UI’ switch can be toggled for controlling the UI for navigation. In ‘ON’ state it starts the python 
 function for navigating window based on the action assigned to a particular hand gesture and it ends as we switch to ‘OFF’ state. This 
 however is applied when you restart the camera (closing the present session of camera, but not exiting the application). 
 As we scroll further GUI looks like following:
     
-Fig 18 : UI Of Gesture page
+![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/GESTURES.PNG)
+				Fig 18 : UI Of Gesture page
 
-        This is the Gesture page which contains aspects related to the gestures, actions, addition of new gestures, trainings etc. Two 
+This is the Gesture page which contains aspects related to the gestures, actions, addition of new gestures, trainings etc. Two 
 buttons ‘View Gesture’ and ‘Add Gesture’ are present on the left side of the division. The ‘View Gesture’ button displays the gestures 
 and actions associated with it in a table. The ‘Add Gesture’ button displays an input box where we must enter the name of the gesture, 
 we want to add so that we can modify and train the model to recognize the new gestures along with the predefined gestures. If the 
@@ -69,10 +88,11 @@ classify gestures along with the newly added gesture. After completing the serie
 ‘View Gesture’ button which then displays updated gesture names and their associated actions in the table.
 
 As we scroll further GUI looks like following :
- 
-Fig 19 : UI Of Action page
 
-        This is the Action page which contains aspects related to the gestures, actions, assigning a new action, editing existing 
+![alt text](https://raw.githubusercontent.com/NabinAdhikari674/Hand-Motion-Identification-for-System-Navigation-and-Control/webEngine/sources/ACTIONS.PNG)
+				Fig 19 : UI Of Action page
+
+This is the Action page which contains aspects related to the gestures, actions, assigning a new action, editing existing 
 actions, trainings etc. Two buttons ‘Assign Action’ and ‘Add Gesture’ are present on the right side of the division. The button 
 ‘Assign Action’ displays the gestures and its associated action in the table that are already been in the product or we can say which
 are been properly trained. The ‘Assign Gesture’ button displays an input box where we must choose an action and assign it with a gesture 
