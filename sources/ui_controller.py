@@ -32,7 +32,6 @@ def mouseMovement(a=0,b=0):
     except Exception as exp:
         pass
         #print ('ERROR in mcontroller.py!!\n\tError:\n\t',exp)
-
 def mouseDrag(a=0,b=0,drag=None):
     global sizex,sizey
     try:
@@ -140,46 +139,47 @@ def mainController(gesture=None):
     if list(actionList)[:-6].count(action) >=5 :
         print(action)
         actionList.clear()
-        print(actionList)
+        #print(actionList)
 
-        if action == 'MouseMovement':
+        if 'MouseMovement' in action:
             a = int(gv.get_global_values('dX','global')[0])
             b = int(gv.get_global_values('dY','global')[0])
             mouseMovement(-a,b)
-        if action == 'WindowsKey':
+        if 'WindowsKey' in action:
+            print("pressed")
             keyBoardFunction('win')
-        if action == 'Play/Pause (Media)':
+        if 'Play/Pause (Media)' in action:
             keyBoardFunction('playpause')
-        if action == 'PreviousTrack (Media)':
+        if 'PreviousTrack (Media)' in action:
             keyBoardFunction('prevtrack')
-        if action == 'NextTrack (Media)':
+        if 'NextTrack (Media)' in action:
             keyBoardFunction('nexttrack')
-        if action == 'FullScreen (Browser)':
+        if 'FullScreen (Browser)' in action:
             keyBoardFunction('f11')
-        if action == 'Refresh (Browser)':
+        if 'Refresh (Browser)' in action:
             keyBoardFunction('browserrefresh')
-        if action == 'Forward (Browser)':
+        if 'Forward (Browser)' in action:
             keyBoardFunction('browserforward')
-        if action == 'Backward (Browser)':
+        if 'Backward (Browser)' in action:
             keyBoardFunction('browserback')
-        if action == 'Search (Browser)':
+        if 'Search (Browser)' in action:
             keyBoardFunction('browsersearch')
-        if action == 'Home (Browser)':
+        if 'Home (Browser)' in action:
             keyBoardFunction('browserhome')
-        if action == 'Home (KeyBoard)':
+        if 'Home (KeyBoard)' in action:
             keyBoardFunction('home')
-        if action == 'ScrollUp':
+        if 'ScrollUp' in action:
             mouseScroll('top')
-        if action == 'ScrollDown':
+        if 'ScrollDown' in action:
             mouseScroll('down')
-        if action == 'CapsLock':
+        if 'CapsLock' in action:
             keyBoardFunction('capslock')
-        if action == 'RightClick':
+        if 'RightClick' in action:
             mouseClick('right')
-        if action == 'LeftClick':
+        if 'LeftClick' in action:
             mouseClick('right')
-        if action == 'DoubleClick':
+        if 'DoubleClick' in action:
             mouseClick('left')
             mouseClick('left')
-        if action == 'MouseDrag':
+        if 'MouseDrag' in action:
             mouseDrag(1,1)
