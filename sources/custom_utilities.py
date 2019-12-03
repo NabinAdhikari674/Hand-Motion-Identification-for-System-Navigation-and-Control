@@ -39,10 +39,9 @@ def build_new_model(base_model,class_list=["1", "2", "3","4","5","Fist","Palm"])
     from tensorflow.keras.models import load_model
     from tensorflow.keras.utils import plot_model
 
-
     #class_list = ["1", "2", "3","4","5","Fist","Palm","None"]
     base_model = load_model(base_model)
-    plot_model(base_model, to_file='../generaredData/base_model.png')
+    plot_model(base_model, to_file='../generatedData/base_model.png')
     num_classes=len(class_list)
 
     if num_classes==9:
