@@ -17,7 +17,7 @@ The programming language to be dominantly used is “Python”, probably version
 
 ####The Model files(Json with NN Frame and H5 with Weights) are uploaded in G-Drive and the links will be shared later.
 
-#User-Manual : 
+# User-Manual : 
 This product was made as an experiment and was not intended to be used for a daily use case an HCI tool. The product is preferred to be 
 used in a controlled environment where the background is not usually changing or is static. The main application shall be distributed 
 either as a Folder containing all the source codes or, as an executable file. The source codes have three main folders in the main root 
