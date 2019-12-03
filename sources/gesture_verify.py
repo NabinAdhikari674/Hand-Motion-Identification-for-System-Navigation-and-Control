@@ -278,7 +278,7 @@ def ModelTrainer(*args):
             trained = 1
 
     if trained == 1:
-        choose=str(input("\n\t\tSave Model to the Disk?\nEnter [y/n]:   "))
+        choose = str(input("\n\t\tSave Model to the Disk?\nEnter [y/n]:   "))
         if choose =='y':
             model.save("../generatedData/newModel.h5")
             print("Model Saved !! ('newModel.h5')")
@@ -287,7 +287,7 @@ def ModelTrainer(*args):
             if choose =='y':
                 pass
             if choose =='n':
-                model.save("../generatedData/newModel.h5.h5")
+                model.save("../generatedData/newModel.h5")
                 print("Knew It !! Model Saved as ('newModel.h5')")
     flags.append(4)
     return(model)
@@ -358,6 +358,7 @@ def ModelLoader(loc='models/9G_tanh_model_105906112019.h5'):
     print("======== Model Loaded from Disk. ========")
 
     return model
+
 def GesturePredictor(model,array,mode='gray'):
     if mode=='gray':
         array = resize(array, (150, 150))
