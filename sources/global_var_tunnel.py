@@ -8,7 +8,7 @@ direction=""
 
 def update(global_var,value,tunnel='global'):
     #print("Loading..")
-    if tunnel=='global':
+    if tunnel == 'global':
         try:
             gdata = pd.read_csv('dataBase/global_var_tunnel.csv')
         except FileNotFoundError:
@@ -20,12 +20,25 @@ def update(global_var,value,tunnel='global'):
         #print(global_var,'::',value)
         gdata.to_csv('dataBase/global_var_tunnel.csv',index=False)
         #print("== Updated ==")
-    elif tunnel=='buffer':
+    elif tunnel == 'buffer':
         bufferData=value
         bufferInfo = pd.DataFrame(list(bufferData.items()), columns=['Gestures', 'Actions'])
         bufferInfo = bufferInfo.sort_values(['Gestures'])
         bufferInfo.to_csv('dataBase/bufferInfo.csv',index=False)
         print("== Buffer Updated ==")
+    elif tunnel == 'information':
+        try:
+            gdata = pd.read_csv('dataBase/information_center.csv')
+        except FileNotFoundError:
+            print("=== Information Center Not Found !! ===")
+        #print(global_var)
+        index = gdata.index[gdata['Gestures'] == global_var].tolist()
+        #print("::",index)
+        gdata.loc[index,'Actions'] = value
+
+        gdata.to_csv('dataBase/information_center.csv',index=False)
+
+
 
 def get_global_values(global_var='',tunnel='global'):
     if tunnel=='global':
@@ -35,8 +48,8 @@ def get_global_values(global_var='',tunnel='global'):
             print("=== Global Variable Tunnel Not Found !! ===")
         except Exception as exp:
             print("=== Error in global_var_tunnel.py ===\n\t",exp)
-        index=gdata.index[gdata['Variables'] == global_var].tolist()
-        value=gdata.loc[index,'Values'].tolist()
+        index = gdata.index[gdata['Variables'] == global_var].tolist()
+        value = gdata.loc[index,'Values'].tolist()
         return value
     elif tunnel=='information':
         try:
@@ -44,8 +57,10 @@ def get_global_values(global_var='',tunnel='global'):
         except FileNotFoundError:
             print("=== Information Center Not Found !! ===")
         #index = gdata.index[gdata['Gesture'] == global_var].tolist()
-        gestures = idata['Gesture'].tolist()
-        actions = idata['Action'].tolist()
+        gestures = idata['Gestures'].tolist()
+        gestures = [i for i in gestures if i == i]
+        actions = idata['Actions'].tolist()
+        actions = [i for i in actions if i == i]
 
         infoDict = dict(zip(gestures, actions))
         gestures = str(gestures)
@@ -62,6 +77,17 @@ def get_global_values(global_var='',tunnel='global'):
         gestures = bufferInfo['Gestures'].tolist()
         actions = bufferInfo['Actions'].tolist()
         return gestures,actions
+    elif tunnel == 'availableActions':
+        try:
+            idata = pd.read_csv('dataBase/information_center.csv')
+        except FileNotFoundError:
+            print("=== Information Center Not Found !! ===")
+        availableActions = idata['Available Actions'].tolist()
+        availableActions = [i for i in availableActions if i == i]
+
+        availableActions = str(availableActions)
+
+        return availableActions
 
 
 #update('dY',1067)
