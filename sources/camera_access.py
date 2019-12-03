@@ -21,7 +21,8 @@ try:
     print("\tSetting Global Variables...",end=' ')
     gesture_model=gvf.ModelLoader()
     information_center_data = pd.read_csv('dataBase/information_center.csv')
-    gesture_names = information_center_data['Gesture'].tolist()
+    gesture_names = information_center_data['Gestures'].tolist()
+    gesture_names = [i for i in gesture_names if i == i]
     print("\tThe Current Available Gestures are : ",gesture_names)
     currentframe=1
     #gesture_predict_mode=gv.gesture_predict_mode
@@ -132,6 +133,11 @@ def camera_opener():
     print("Running \"camera_opener\" from module \"camera_access.py\"")
     global bg,i,currentframe,flag1,gesture_names,kernel
     print("\tOpening Camera...")
+    gesturePredictMode = gv.get_global_values('gesturePredictMode','global')
+    uiControlMode = gv.get_global_values('uiControlMode','global')
+    print("<< gesturePredictMode :: ",gesturePredictMode," >>  << uiControlMode :: ",uiControlMode," >>")
+    if uiControlMode==['True']:
+        import ui_controller as uc
     camera = VideoCapture(0)
     while camera.isOpened():
         _, frame = camera.read()
@@ -181,15 +187,16 @@ def camera_opener():
             #extBot = tuple(contours[contours[:, :, 1].argmax()][0])
             circle(frame_roi,extTop, 8, (255, 0, 0), -1)
 
-            if gv.get_global_values('gesturePredictMode','global')==['TRUE']:
+            if gesturePredictMode==['TRUE']:
                 predictions = gvf.GesturePredictor(gesture_model,thres) ## PREDICTION
                 predictions = predictions.tolist()
+                #print(predictions)
                 maxPrediction = max(predictions[0])
                 index = predictions[0].index(maxPrediction)
                 gesture = gesture_names[index]
+                #print(gesture)
                 msg = str(gesture+' : '+str(maxPrediction*100)[:-12]+" % ")
-                if gv.get_global_values('uiControlMode','global')==['True'] and gesture!='None':
-                    import ui_controller as uc
+                if uiControlMode==['True'] and gesture!='None':
                     drawContours(frame_roi,contours, -1,(100, 25,20),2,LINE_AA)
                     blob_tracker(contours,frame_roi,frame)
                     uc.mainController(gesture)
