@@ -1,434 +1,245 @@
-#####    Module to verify gesture using threshold Image   #####
-#The gesture dataset is collected by randomly clicking images
-#from threshold window while running capture module
+# Video Capture and Processing Module for the Project
+# IMPORT
+try:
+    print("Importing for \"camera_access\"")
+    from collections import deque
+    from cv2 import VideoCapture,bilateralFilter,flip,rectangle,putText,cvtColor,GaussianBlur,waitKey,absdiff,threshold,findContours,line,minEnclosingCircle
+    from cv2 import FONT_HERSHEY_SIMPLEX,LINE_AA,COLOR_BGR2GRAY,resize,imshow,imwrite,drawContours,accumulateWeighted,morphologyEx,circle,moments
+    from cv2 import THRESH_BINARY,THRESH_OTSU,MORPH_OPEN,MORPH_CLOSE,RETR_EXTERNAL,CHAIN_APPROX_SIMPLE,contourArea,destroyAllWindows
+    import numpy as np
+    import pandas as pd
+    from tensorflow import cast,float32
+    #Local Imports
+    import gesture_verify as gvf
+    import global_var_tunnel as gv
 
-print("\n\t\t\t##Running ","gesture-verify-test.py##");
-print("Setting Global Variables and Packages...",end=' ')
-import numpy as np
-import custom_utilities
-import global_var_tunnel as gv
-flags=[];
-names = ['1','2','3','4','5','Palm','Fist']
-d1=d2=d3=d4=d5=dFist=dPalm=''
-Gesture_1=Gesture_2=Gesture_3=Gesture_4=Gesture_5=Gesture_Fist=Gesture_Palm=[]
-print("## Done.")
+except Exception as exp:
+    print("\t!!! Error in \"camera_opener\" from module \"camera_access.py\" !!!")
+    print("\t Error : \n\t\t",exp)
+# Global Variables Setting
+try:
+    print("\tSetting Global Variables...",end=' ')
+    gesture_model=gvf.ModelLoader()
+    information_center_data = pd.read_csv('dataBase/information_center.csv')
+    gesture_names = information_center_data['Gestures'].tolist()
+    gesture_names = [i for i in gesture_names if i == i]
+    print("\tThe Current Available Gestures are : ",gesture_names)
+    currentframe=1
+    #gesture_predict_mode=gv.gesture_predict_mode
+    i=0
+    bg=None
+    flag1=0
+    kernel = np.ones((2,2),np.uint8) #kernel for Opening and Closing morphologyEx
+    pts = deque(maxlen=32)
+    counter = 0
+    (dX, dY) = (0, 0)
+    direction = ""
+    print("## Done.")
+except Exception as exp:
+    print("\t!!! Error in \"camera_opener\" from module \"camera_access.py\" !!!")
+    print("\t Error : \n\t\t",exp)
 
-def DataReader(dir_path):
-    print("\n\t\t\t##Running ","DataReader Function##");
-    import os
-    global names,flags
-    global d1,d2,d3,d4,d5,DFist,DPalm
-    global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
-    print("The Passed Path is : ",dir_path)
-    d1 = os.path.join('DATA/TrainingData/1/')
-    d2 = os.path.join('DATA/TrainingData/2/')
-    d3 = os.path.join('DATA/TrainingData/3/')
-    d4 = os.path.join('DATA/TrainingData/4/')
-    d5 = os.path.join('DATA/TrainingData/5/')
-    dFist = os.path.join('DATA/TrainingData/Fist/')
-    dPalm = os.path.join('DATA/TrainingData/Palm/')
+def image_bg_average(img):
+    global bg
+    if bg is None :
+        bg = img.copy().astype("float")
+        print("## Running Initial Background Scan . . . ")
+        return
+    accumulateWeighted(img,bg,0.3)
+    #weight(0.3 now) is update bg speed(how fast the accumulator “forgets” about earlier images)
+    if i==49:
+        print(" Scan Done...Ready For Threshold ##")
 
-    print('Total Training Gesture (1) images:', len(os.listdir(d1)))
-    print('Total Training Gesture (2) images:', len(os.listdir(d2)))
-    print('Total Training Gesture (3) images:', len(os.listdir(d3)))
-    print('Total Training Gesture (4) images:', len(os.listdir(d4)))
-    print('Total Training Gesture (5) images:', len(os.listdir(d5)))
-    print('Total Training Gesture (Fist) images:', len(os.listdir(dFist)))
-    print('Total Training Gesture (Palm) images:', len(os.listdir(dPalm)))
+def image_segmenter(img):
+    global bg
+    #cv2.accumulateWeighted(img,bg,0.001)
+    diff = absdiff(bg.astype("uint8"),img)
+    #th1 = cv2.threshold(diff,30,255,cv2.THRESH_BINARY) [1]
+    #cv2.imshow("Binary only",th1)
+    thres = threshold(diff,30,255,THRESH_BINARY + THRESH_OTSU) [1]
+    thres = morphologyEx(thres, MORPH_OPEN, kernel)      #Opening
+    thres = morphologyEx(thres, MORPH_CLOSE,np.ones((3,3),np.uint8) )     #Closing
+    cnts,_ = findContours(thres,RETR_EXTERNAL,CHAIN_APPROX_SIMPLE)
+    if len(cnts) == 0:
+        return
+    else:
+        segment = max(cnts, key=contourArea)
+        return (thres,segment)
 
-    Gesture_1 = os.listdir(d1);   #print(Gesture_1[:10])
-    Gesture_2 = os.listdir(d2);   #print(Gesture_2[:10])
-    Gesture_3 = os.listdir(d3);   #print(Gesture_3[:10])
-    Gesture_4 = os.listdir(d4);   #print(Gesture_4[:10])
-    Gesture_5 = os.listdir(d5);   #print(Gesture_5[:10])
-    Gesture_Fist = os.listdir(dFist);   #print(Gesture_Fist[:10])
-    Gesture_Palm = os.listdir(dPalm);   #print(Gesture_Palm[:10])
-    dir_path=os.path.join('DATA/TrainingData/')
-    print("===============================\nThe Returned Path is : ",dir_path)
+def blob_tracker(c,frame,frame_full):
+    global i
+    ((x, y), radius) = minEnclosingCircle(c)
+    M = moments(c)
+    center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+    if i==50:
+        for z in range (1,33):
+            pts.append(center)
+        i+=1
+    #print(center)
+    if radius > 10:
+        circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
+        circle(frame, center, 5, (0, 0, 255), -1)
+        pts.appendleft(center)
+        #print('The point is ',pts)
+    for index in np.arange(1, len(pts)):
+        #print("here")
+        # if either of the tracked points are None, ignore
+        # them
+        if pts[index - 1] is None or pts[index] is None:
+                continue
+        if index == 1 and pts[-10] is not None:
+            # compute the difference between the x and y
+            # coordinates and re-initialize the direction
+            # text variables
+            dX = pts[-10][0] - pts[index][0]
+            dY = pts[-10][1] - pts[index][1]
+            (dirX, dirY) = ("", "")
 
-    return dir_path
+            # ensure there is significant movement in the
+            # x-direction
+            if np.abs(dX) > 20:
+                    dirX = "East" if np.sign(dX) == 1 else "West"
 
-def DataPrepper():
-    print("\n\t\t\t##Running ","DataPrepper Function##");
-    global names,flags
-    global d1,d2,d3,d4,d5,DFist,DPalm
-    global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
+            # ensure there is significant movement in the
+            # y-direction
+            if np.abs(dY) > 20:
+                    dirY = "North" if np.sign(dY) == 1 else "South"
 
-    try:
-        print("Importing Packages Required...",end="##")
-        import os
-        print("...Import Sucessful")
-    except:
-        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
+            # handle when both directions are non-empty
+            if dirX != "" and dirY != "":
+                    direction = "{}-{}".format(dirY, dirX)
 
-    try:
-        print("Importing Data from Folders...##",end=" ")
-        current_path=os.getcwd()
-        #print("The Current Path is : ",current_path)
-        dir_path=DataReader(current_path)
-        flags.append(1)
-        print("Read DONE.\n")
-    except FileNotFoundError:
-        print("\n\n\t\tImage Folders Not Found !!!")
-        foldername=custom_utilities.FileFolderPicker([('Folder')],title='FolderPicker',mode='Folder')
-        dir_path=DataReader(foldername)
-    except Exception as exp:
-        print("\t!! Error !! : \n\t\t",exp)
-    finally:
-        print("Data LOAD Done")
+            # otherwise, only one direction is non-empty
+            else:
+                    direction = dirX if dirX != "" else dirY
+            #print(dirX,dirY)
 
-    #import matplotlib.pyplot as plt
-    #import matplotlib.image as mpimg
+        thickness = int(np.sqrt(32/ float(index +2))*1.5)
+        line(frame_full, pts[index-1], pts[index], (250, 0, 25), thickness)
 
-    #pic_index = 2
+    #print(dX,dY)
 
-    #next_1 = [os.path.join(d1, fname)for fname in Gesture_1[pic_index-2:pic_index]]
-    #next_2 = [os.path.join(d2, fname)for fname in Gesture_2[pic_index-2:pic_index]]
-    #next_3 = [os.path.join(d3, fname)for fname in Gesture_3[pic_index-2:pic_index]]
+    #gv.update('direction',direction,'global')
+    putText(frame_full, direction, (500,frame.shape[0]+85),FONT_HERSHEY_SIMPLEX,
+            0.5, (0, 0, 255), 1)
+    putText(frame_full, "dx: {}, dy: {}".format(dX,dY),
+            (380, frame.shape[0]+85),FONT_HERSHEY_SIMPLEX,
+            0.35, (0, 0, 255), 1)
+    gv.update('dX',dX,'global')
+    gv.update('dY',dY,'global')
+    return frame
 
-    #for i, img_path in enumerate(next_1+next_2+next_3):
-      #print(img_path)
-    #  img = mpimg.imread(img_path)
-    #  plt.imshow(img)
-    #  plt.axis('Off')
-    # plt.show()
+def camera_opener():
+    print("Running \"camera_opener\" from module \"camera_access.py\"")
+    global bg,i,currentframe,flag1,gesture_names,kernel
+    print("\tOpening Camera...")
+    gesturePredictMode = gv.get_global_values('gesturePredictMode','global')
+    uiControlMode = gv.get_global_values('uiControlMode','global')
+    print("<< gesturePredictMode :: ",gesturePredictMode," >>  << uiControlMode :: ",uiControlMode," >>")
+    if uiControlMode==['True']:
+        import ui_controller as uc
+    camera = VideoCapture(0)
+    while camera.isOpened():
+        _, frame = camera.read()
+        frame = flip(frame, 1)
+        rectangle(frame,(370,90),(630,400),(255,0,0),0)
+        putText(frame,'Region of Interest',(350,80),FONT_HERSHEY_SIMPLEX,1,(0,70,250),2,LINE_AA)
 
-    return dir_path
-    print("\n\n DataPrepper END\n")
+        frame_roi = frame[90:400,370:630]
+        frame_roi = bilateralFilter(frame_roi, 5, 50, 100) #     smoothing filter
+        frame_roi = GaussianBlur(frame_roi, (7, 7), 0)     ####### Gaussian Blur ###########
 
-def PreProcessor(dir_path='../generatedData/gestureData/'):
-    print("\t\t\t##Running ","PreProcessor Function##");
-    global flags
-    #global d1,d2,d3,d4,d5,DFist,DPalm
-    #global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
-
-    try:
-        print("Importing Packages Required...",end="##")
-        #import tensorflow as tf
-        #import keras_preprocessing
-        #from keras_preprocessing import image
-        from keras_preprocessing.image import ImageDataGenerator
-        print("...Import Sucessful")
-    except:
-        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
-
-    TRAINING_DIR = dir_path+'TrainingData'
-    print("Training Directory is :",TRAINING_DIR)
-    training_datagen = ImageDataGenerator(rescale = 1./255, horizontal_flip=True)
-    train_generator = training_datagen.flow_from_directory(TRAINING_DIR,target_size=(150,150),color_mode='grayscale',class_mode='categorical')
-
-    VALIDATION_DIR=dir_path+'ValidationData'
-    validation_datagen = ImageDataGenerator(rescale = 1./255,horizontal_flip=True)
-    validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR,target_size=(150,150),color_mode='grayscale',class_mode='categorical')
-
-    print("\n\t##Data PreProcessing Done. END\n")
-    flags.append(3)
-    return (train_generator,validation_generator)
-
-def NeuralNetBuilder():
-    print("\t\t\t##Running ","NeuralNetBuilder Function##");
-    global flags
-    #global d1,d2,d3,d4,d5,DFist,DPalm
-    #global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
-
-    try:
-        print("Importing Packages Required...",end="##")
-        import tensorflow as tf
-        #from matplotlib import pyplot as plt
-        print("...Import Sucessful")
-    except:
-        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
-
-    model = tf.keras.models.Sequential([
-                                        # Note the input shape is the desired size of the image 150x150 with 3 bytes color
-                                        # This is the first convolution
-                                        tf.keras.layers.Conv2D(64, (3,3), activation='relu', input_shape=(150, 150,1)),
-                                        tf.keras.layers.MaxPooling2D(2, 2),
-                                        # The second convolution
-                                        tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
-                                        tf.keras.layers.MaxPooling2D(2,2),
-                                        # The third convolution
-                                        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-                                        tf.keras.layers.MaxPooling2D(2,2),
-                                        # The fourth convolution
-                                        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-                                        tf.keras.layers.MaxPooling2D(2,2),
-                                        # The Fifth Convolution
-                                        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-                                        #tf.keras.layers.MaxPooling2D(2,2),
-                                        # The Sixth convolution
-                                        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-                                        #tf.keras.layers.MaxPooling2D(2,2),
-                                        # Flatten the results to feed into a DNN
-                                        tf.keras.layers.Flatten(),
-                                        tf.keras.layers.Dropout(0.5),
-                                        # 512 neuron hidden layer
-                                        tf.keras.layers.Dense(512, activation='tanh'),
-                                        tf.keras.layers.Dense(9, activation='sigmoid')
-                                        ])
-
-    model.summary()
-    model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-    print("\n\t##Neural Net Model Built and Compiled(Ready for Training). END\n")
-    flags.append(7)
-    return(model)
-
-def DataSplitter(train_generator,validation_generator):
-    print("=========== Data Preparation going On ... ============\n")
-
-    #xt, yt = zip(*(train_generator[i] for i in range(len(train_generator))))
-    #x_train, y_train = np.vstack(xt), np.vstack(yt)
-    for d, l in validation_generator:
-        data.append(d)
-        labels.append(l)
-        i += 1
-        if i == max_iter:
-            break
-    print("Training Data Length : ",len(x_train),x_train.shape)
+        #gray=frame_roi
+        gray = cvtColor(frame_roi, COLOR_BGR2GRAY)
+        gray = GaussianBlur(gray, (7, 7), 0)     ####### Gaussian Blur ###########
 
 
-    #xv,yv = zip(*(validation_generator[i] for i in range(len(validation_generator))))
-    #x_val, y_val = np.vstack(xv), np.vstack(yv)
-    print("Validation Data Length : ",len(x_val),x_val.shape)
-    print(x_val)
+        keypress = waitKey(2) & 0xFF
+        if keypress is not 0xFF:
+            print("\t KeyPressed : ",keypress)
+            if keypress == ord("c"):
+                name = '../generatedData/Capture' + str(currentframe) + '.jpg'
+                print ('Creating...' + name)
+                imwrite(name,crop)
+                currentframe += 1
+            if keypress == ord("p"):
+                flag1=1
+            if keypress == ord("o") or currentframe==500:
+                flag1=0
+            if keypress == ord("r"):
+                currentframe=1
+            if flag1==1:
+                name = '../generatedData/ContCapture' + str(currentframe) + '.jpg'
+                print ('\t Creating...' + name)
+                imwrite(name,crop)
+                currentframe += 1
 
-    print("============ Data Preparation DONE ... =============\n")
-    return x_train,y_train,x_val,y_val
+        while i<50:
+            image_bg_average(gray)
+            i=i+1
+        segmenterReturn = image_segmenter( gray )
+        if segmenterReturn is not None:
+            (thres,contours) = segmenterReturn
 
-def SVMModel():
+            #extLeft = tuple(contours[c[:, :, 0].argmin()][0])
+            #extRight = tuple(contours[contours[:, :, 0].argmax()][0])
+            extTop = tuple(contours[contours[:, :,1].argmin()][0])
+            #extBot = tuple(contours[contours[:, :, 1].argmax()][0])
+            circle(frame_roi,extTop, 8, (255, 0, 0), -1)
 
-    #from sklearn.svm import SVC
-    from sklearn.tree import DecisionTreeClassifier
-    model=DecisionTreeClassifier()
+            if gesturePredictMode==['TRUE']:
+                predictions = gvf.GesturePredictor(gesture_model,thres) ## PREDICTION
+                predictions = predictions.tolist()
+                #print(predictions)
+                maxPrediction = max(predictions[0])
+                index = predictions[0].index(maxPrediction)
+                gesture = gesture_names[index]
+                #print(gesture)
+                msg = str(gesture+' : '+str(maxPrediction*100)[:-12]+" % ")
+                if uiControlMode==['True'] and gesture!='None':
+                    drawContours(frame_roi,contours, -1,(100, 25,20),2,LINE_AA)
+                    blob_tracker(contours,frame_roi,frame)
+                    uc.mainController(gesture)     #========================================================
+                #else :
+                #    print(gv.get_global_values('uiControlMode','global'),'::',gesture)
+                #print(gesture)
+                putText(frame,msg,(370,120),FONT_HERSHEY_SIMPLEX,0.8,(0,70,250),2)
+                imshow("Region of Interest in RGB",frame_roi)
+                imshow("Binary Threshold",thres)
+
+            #else :
+            #    print('here : ',gv.get_global_values('gesturePredictMode','global'))
 
 
-    '''import tensorflow as tf
-
-    model = tf.keras.models.Sequential([
-
-        tf.keras.layers.Conv2D(64, (3,3), activation='relu', input_shape=(150, 150, 3)),
-        tf.keras.layers.MaxPooling2D(2, 2),
-                                        # The second convolution
-        tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
-        tf.keras.layers.MaxPooling2D(2,2),
-                                        # The third convolution
-        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-        tf.keras.layers.MaxPooling2D(2,2),
-                                        # The fourth convolution
-        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-        tf.keras.layers.MaxPooling2D(2,2),
-
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(512, activation='relu'),
-        tf.keras.layers.Dense(7,kernel_regularizer=tf.keras.regularizers.l2(0.01)), #kernel_regularizer=regularizers.l2(0.01)
-        tf.keras.layers.Dense(7, activation='softmax')
-
-                                      ])
 
 
-    model.compile(loss='squared_hinge',optimizer='adadelta',metrics=['accuracy'])
-    '''
+            #cv2.putText(frame,gesture2,(370,120),font,1,(0,70,250),2,cv2.LINE_AA)
 
-    print("\n\t##SVM Model Built and Compiled(Ready for Training). END\n")
-    flags.append(8)
-    return(model)
+        imshow('Live Feed from WebCam',frame)
+        #cv2.imshow('Cropped',crop)
 
-def ModelTrainer(*args):
-    print("\t\t\t##Running ","ModelTrainerTester Function##");
-    global flags
-    model=train_generator=validation_generator=generator=x_train=y_train=None
-    for argument in args:
-        try:
-            model=args[0]
-            train_generator=args[1]
-            validation_generator=args[2]
-            generator=args[3]
-            x_train=args[4]
-            y_train=args[5]
-        except:
-            pass
-            #print("Some Arguments were Missing.But we can Move on...")
+        if keypress is not 0xFF :
+            #print("\t KeyPressed : ",keypress)
+            if keypress == ord("q"):
+                print("Exit Key Pressed")
+                break
+            if keypress == ord("b"):
+                print("   ## Running Background Scan...",end=' ')
+                accumulateWeighted(gray,bg,0.4)
+                print(" .. DONE  ##")
+            if keypress == ord("x"):
+                name = '../generatedData/BlackCapture' + str(currentframe) + '.jpg'
+                print ('Creating...' + name)
+                imwrite(name,thres)
+                currentframe += 1
 
-    #global d1,d2,d3,d4,d5,DFist,DPalm
-    #global Gesture_1,Gesture_2,Gesture_3,Gesture_4,Gesture_5,Gesture_Fist,Gesture_Palm
+    camera.release()
+    destroyAllWindows()
 
-    try:
-        print("Importing Packages Required...",end="##")
-        import tensorflow as tf
-        import logging
-        logging.getLogger('tensorflow').disabled = True
-        #from matplotlib import pyplot as plt
-        print("...Import Sucessful")
-    except:
-        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\t")
-
-    trained=0
-    choose=str(input("\n\t\tStart the training?\nEnter [y/n]:   "))
-    if choose=='y':
-        print("!! Sit Tight !! Training takes a Whole lot of Time.\n")
-        if generator==True:
-            history = model.fit_generator(train_generator,validation_data = validation_generator, epochs=1, verbose = 1)# ,validation_data = validation_generator
-        elif generator==False:
-            history = model.fit(x_train,y_train)
-        trained = 1
-    if choose=='n':
-        choose=str(input("\n\t\t!!! Halt the Training for Sure?\nEnter [y/n]:   "))
-        if choose=='y':
-            pass
-        if choose=='n':
-            print("Buckle Up !! You are up for a Long Ride !!\n")
-            if generator==True:
-                history = model.fit_generator(train_generator,validation_data = validation_generator, epochs=1, verbose = 1)# ,validation_data = validation_generator
-            elif generator==False:
-                history = model.fit(x_train,y_train)
-            trained = 1
-
-    if trained == 1:
-        choose = str(input("\n\t\tSave Model to the Disk?\nEnter [y/n]:   "))
-        if choose =='y':
-            model.save("../generatedData/newModel.h5")
-            print("Model Saved !! ('newModel.h5')")
-        if choose =='n':
-            choose=str(input("\n\t\tYou Sure to not save the Hard-earned Trained Model?\nEnter [y/n]:   "))
-            if choose =='y':
-                pass
-            if choose =='n':
-                model.save("../generatedData/newModel.h5")
-                print("Knew It !! Model Saved as ('newModel.h5')")
-    flags.append(4)
-    return(model)
-
-def ModelSaver(model):
-    print("This Model Saver")
-    print("The Flags are : ",flags)
-    ok=1
-    if 5 in flags:
-        print("It seems that You have Trained a new Model without Loading one")
-        ok=1
-    if 4 in flags:
-        if 5 not in flags:
-            print("It seems that You have Trained a old Model loaded through a Pickle file")
-            ok=1
-    if 6 in flags:
-        print("Model was loaded so NO Need TO SAVE")
-    if ok==1:
-        print("Choser Ahead")
-        def choser1234(model):
-            print("The Q now is :")
-            choose=str(input("\tDo you want to save the Neural Model( Frame Only ) for later use?\nEnter [y/n]:   "))
-            if choose=='y':
-                print("==================================================")
-                print("\nSaving Model to Jason File (gesture_neural_model.json)...##",end=" ")
-                import time
-                file="gesture_neural_model1.json"
-                print("Creating Model At: ", file)
-                start_time = time.time()
-                #model = NeuralNetBuilder()
-                json_model = model.to_json()
-                with open(file, "w") as json_file:
-                    json_file.write(json_model)
-                end_time = time.time()
-                total_time = end_time - start_time
-                total_time=int(total_time)
-                print("Model Saved in : ", total_time, " seconds")
-                print("SAVE MODEL DONE.")
-                print("==================================================")
-            elif choose=='n':
-                print("!!! Exiting without Saving the model !!!")
-        choser1234(model)
-
-def ModelLoader(loc='models/9G_tanh_model_105906112019.h5'):
-    print("\t\t\n  #### Running ModelLoader Function ####\n")
-    try:
-        print("Importing Packages Required...",end="##")
-        from tensorflow.keras.models import load_model
-        #from tensorflow.keras.models import model_from_json
-        print("...Import Sucessful")
-    except Exception as exp:
-        print("\n\t##Error in IMPORT...Check if all packages are properly Installed##\n\tError:\n\t\t",exp)
-
-    print("Importing Trained Model using  \"h5\" File...##",end=" ")
-    try:
-        loc='models/9G_tanh_model_105906112019.h5'
-        model=load_model(loc)
-        gv.update('modelUsed',loc)
-    except FileNotFoundError:
-        ftypes = [('Hierarchical Data Format(HDF)',"*.h5")]
-        tt1  = "Hierarchical Data Format (HDFv5) Picker"
-        filename1=custom_utilities.FileFolderPicker(ftypes,tt1)
-        model=load_model(filename1)
-        gv.update(filename1)
-    except Exception as ex:
-        print("!! Error !! : \n\t",ex)
-
-    print("======== Model Loaded from Disk. ========")
-
-    return model
-
-def GesturePredictor(model,array,mode='gray'):
-    if mode=='gray':
-        array = resize(array, (150, 150))
-        array = cast(array, float32)
-        array = np.expand_dims(array,axis=2)
-        array = np.expand_dims(array,axis=0)
-        array = np.vstack([array])
-        prediction = model.predict(array)
-        return prediction
-
-    elif mode=='rgb':
-        array = np.expand_dims(array,axis=0)
-        array = np.vstack([array])
-        prediction = model.predict(array)
-        return prediction
 
 if __name__ == "__main__":
-    print("===== ## This is Main Block of the Program of 'gesture_verify.py' ## =====")
-    choose=str(input("\n\t\tLoad Model From the Disk?\nEnter [y/n]:   "))
-    if choose=='y':
-        model=ModelLoader()
-    if choose=='n':
-        choose=str(input("\n\t\tYou Sure? Are you upto the heavy Task uphead?\nEnter [y/n]:   "))
-        if choose=='y':
-            dir_path=DataPrepper()
-            train_generator,validation_generator=PreProcessor(dir_path)
-            #print(train_generator)
-            labels = (train_generator.class_indices)
-            labels = dict((v,k) for k,v in labels.items())
-            print("The Training Labels are ================================\n",labels,'\n=================================================')
-            #model=NeuralNetBuilder()
-            model=SVMModel()
-            ModelSaver(model)
-            x_train,y_train,x_val,y_val=DataSplitter(train_generator,validation_generator)
-            ModelTrainer(model,train_generator,validation_generator,False,x_train,y_train)
-        if choose=='n':
-            model=ModelLoader()
-    from keras.preprocessing import image
-    import cv2
-    while True:
-        ftypes = [('Jpg File',"*.jpg")]
-        tt1  = "Picture Picker"
-        path=custom_utilities.FileFolderPicker(ftypes,tt1)
-        img = image.load_img(path, target_size=(150, 150))
-        x = image.img_to_array(img)
-        x = np.expand_dims(x, axis=0)
-        images = np.vstack([x])
-        classes = model.predict(images, batch_size=10)
-        print(classes)
-        keypress = cv2.waitKey(2) & 0xFF
-        if keypress == ord("q"):
-            print("Exit Key Pressed")
-            break
-
-    print("\nPro Tip : You can Make Gesture Predictions using this Module")
-    print("\n====== ## Main Block DOne ##======")
-elif __name__ == "gesture_verify":
-    print("Import Found======================")
-    try:
-        from cv2 import resize
-        from tensorflow import cast,float32
-    except Exception as exp:
-        print(" !! Error !! : \n\t",exp)
+    camera_opener()
+elif __name__ == "sources.camera_access":
+    print("\"camera_access.py\"Imported as : ",__name__)
 else:
-    print("Dunno.But Import Found as : **",__name__)
-
-print("\n\tEND of 'gesture_verify.py'" )
+    print("\"camera_access.py\" - !! UnKnown Import Detected as !! : ",__name__)
